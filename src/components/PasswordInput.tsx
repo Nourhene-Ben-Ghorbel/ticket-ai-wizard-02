@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Control } from "react-hook-form";
 
 interface PasswordInputProps {

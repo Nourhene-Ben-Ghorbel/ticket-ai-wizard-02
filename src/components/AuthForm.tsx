@@ -1,7 +1,7 @@
 
 import { LoginForm } from "./LoginForm";
 import { SignupForm } from "./SignupForm";
-import { LoginFormValues, SignupFormValues } from "@/lib/auth-schemas";
+import { LoginFormValues, SignupFormValues } from "../lib/auth-schemas";
 import { ParticleBackground } from "./ParticleBackground";
 
 interface AuthFormProps {
