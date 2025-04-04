@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { PasswordInput } from "./PasswordInput";
-import { loginSchema, LoginFormValues } from "@/lib/auth-schemas";
+import { loginSchema, LoginFormValues } from "../lib/auth-schemas";
 
 interface LoginFormProps {
   onSubmit: (values: LoginFormValues) => void;
