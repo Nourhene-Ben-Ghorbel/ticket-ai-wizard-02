@@ -145,13 +145,16 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
             "flex max-w-[80%] rounded-2xl p-4",
             isUser
               ? "bg-blue-600 text-white rounded-tr-none"
-              : "glass-card rounded-tl-none"
+              : "bg-gray-100 text-gray-800 rounded-tl-none"
           )}
         >
           <div className={cn("mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full", 
-            isUser ? "bg-blue-700" : "bg-blue-600/30"
+            isUser ? "bg-blue-700" : "bg-blue-100"
           )}>
-            {isUser ? <User size={16} /> : <Bot size={16} />}
+            {isUser ? 
+              <User size={16} className="text-white" /> : 
+              <Bot size={16} className="text-blue-600" />
+            }
           </div>
           <div className="flex-1">
             <div className="mb-1">
@@ -193,15 +196,15 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-13rem)] max-h-[800px] glass-card rounded-xl">
-      <div className="p-4 border-b border-darkblue-700 flex justify-between items-center">
+    <div className="flex flex-col h-[calc(100vh-13rem)] max-h-[800px] bg-white rounded-xl shadow-md border border-gray-200">
+      <div className="p-4 border-b border-gray-200 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-blue-600/30 flex items-center justify-center">
-            <Bot size={18} className="text-blue-400" />
+          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+            <Bot size={18} className="text-blue-600" />
           </div>
-          <h3 className="font-medium">Ticket AI Wizard</h3>
+          <h3 className="font-medium text-gray-800">Ticket AI Wizard</h3>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500">
           <RefreshCw size={16} />
         </Button>
       </div>
@@ -213,10 +216,10 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           ))}
           {loading && (
             <div className="flex w-full mb-4 justify-start">
-              <div className="glass-card rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+              <div className="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-[80%] text-gray-800">
                 <div className="flex items-center">
-                  <div className="mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600/30">
-                    <Bot size={16} />
+                  <div className="mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100">
+                    <Bot size={16} className="text-blue-600" />
                   </div>
                   <Loader2 size={16} className="animate-spin" />
                   <span className="ml-2 text-sm">Génération de la réponse...</span>
@@ -227,14 +230,14 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
         </div>
       </ScrollArea>
       
-      <div className="p-4 border-t border-darkblue-700">
+      <div className="p-4 border-t border-gray-200">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Input
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Posez une question sur votre ticket..."
-            className="flex-1 bg-darkblue-800/50 border-darkblue-700"
+            className="flex-1 border-gray-300 focus:border-blue-400"
             disabled={loading}
           />
           <Button 
@@ -242,7 +245,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
             size="icon" 
             disabled={loading || !input.trim()}
             className={cn(
-              "bg-blue-gradient hover:opacity-90",
+              "bg-blue-600 hover:bg-blue-700",
               !input.trim() && "opacity-50 cursor-not-allowed"
             )}
           >

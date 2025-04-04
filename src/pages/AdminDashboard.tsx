@@ -1,7 +1,6 @@
 
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
-import { ParticleBackground } from "@/components/ParticleBackground";
 import { StatsCard } from "@/components/StatsCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -58,17 +57,16 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-darkblue-950 text-white">
-      <ParticleBackground />
+    <div className="min-h-screen bg-gray-50 text-gray-800">
       <Navbar />
       
       <main className="container mx-auto pt-24 pb-16 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-gray-800">
               Tableau de bord administrateur
             </h1>
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               Visualisez les performances du système et suivez l'état des tickets.
             </p>
           </div>
@@ -79,28 +77,28 @@ const AdminDashboard = () => {
               title="Total des tickets" 
               value="1,284" 
               description="Tous les tickets traités" 
-              icon={<Layers size={20} />}
+              icon={<Layers size={20} className="text-blue-600" />}
               trend={{ value: 12, isPositive: true }}
             />
             <StatsCard 
               title="Tickets résolus" 
               value="876" 
               description="68% du total" 
-              icon={<TicketCheck size={20} />}
+              icon={<TicketCheck size={20} className="text-blue-600" />}
               trend={{ value: 8, isPositive: true }}
             />
             <StatsCard 
               title="Temps de réponse moyen" 
               value="2h 14min" 
               description="Amélioration de 15%" 
-              icon={<Clock size={20} />}
+              icon={<Clock size={20} className="text-blue-600" />}
               trend={{ value: 15, isPositive: true }}
             />
             <StatsCard 
               title="Précision des réponses" 
               value="93%" 
               description="Basé sur les retours utilisateurs" 
-              icon={<Activity size={20} />}
+              icon={<Activity size={20} className="text-blue-600" />}
               trend={{ value: 5, isPositive: true }}
             />
           </div>
@@ -108,22 +106,22 @@ const AdminDashboard = () => {
           {/* Charts section */}
           <Tabs defaultValue="activity" className="space-y-6">
             <div className="flex justify-between items-center">
-              <TabsList className="glass-card">
-                <TabsTrigger value="activity" className="data-[state=active]:bg-blue-600">
+              <TabsList className="bg-white border border-gray-200">
+                <TabsTrigger value="activity" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
                   <BarChart2 size={16} className="mr-2" />
                   Activité
                 </TabsTrigger>
-                <TabsTrigger value="performance" className="data-[state=active]:bg-blue-600">
+                <TabsTrigger value="performance" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
                   <LineChart size={16} className="mr-2" />
                   Performance
                 </TabsTrigger>
-                <TabsTrigger value="distribution" className="data-[state=active]:bg-blue-600">
+                <TabsTrigger value="distribution" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
                   <PieChart size={16} className="mr-2" />
                   Distribution
                 </TabsTrigger>
               </TabsList>
               
-              <div className="glass-card p-1 rounded-md">
+              <div className="bg-white p-1 rounded-md border border-gray-200">
                 <select 
                   value={dateRange}
                   onChange={(e) => setDateRange(e.target.value)}
@@ -138,8 +136,8 @@ const AdminDashboard = () => {
             </div>
             
             <TabsContent value="activity" className="space-y-6">
-              <Card className="p-6 glass-card border-none">
-                <h3 className="text-lg font-medium mb-6">Activité des tickets par jour</h3>
+              <Card className="p-6 bg-white border-gray-200">
+                <h3 className="text-lg font-medium mb-6 text-gray-800">Activité des tickets par jour</h3>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
@@ -150,8 +148,8 @@ const AdminDashboard = () => {
                       <YAxis />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: "#1E293B", 
-                          borderColor: "#334155",
+                          backgroundColor: "white", 
+                          borderColor: "#e5e7eb",
                           borderRadius: "0.5rem" 
                         }}
                       />
@@ -165,8 +163,8 @@ const AdminDashboard = () => {
             </TabsContent>
             
             <TabsContent value="performance" className="space-y-6">
-              <Card className="p-6 glass-card border-none">
-                <h3 className="text-lg font-medium mb-6">Temps de réponse (en heures)</h3>
+              <Card className="p-6 bg-white border-gray-200">
+                <h3 className="text-lg font-medium mb-6 text-gray-800">Temps de réponse (en heures)</h3>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <RechartsLineChart
@@ -185,8 +183,8 @@ const AdminDashboard = () => {
                       <YAxis />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: "#1E293B", 
-                          borderColor: "#334155",
+                          backgroundColor: "white", 
+                          borderColor: "#e5e7eb",
                           borderRadius: "0.5rem" 
                         }}
                       />
@@ -204,8 +202,8 @@ const AdminDashboard = () => {
             </TabsContent>
             
             <TabsContent value="distribution" className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="p-6 glass-card border-none">
-                <h3 className="text-lg font-medium mb-6">État des tickets</h3>
+              <Card className="p-6 bg-white border-gray-200">
+                <h3 className="text-lg font-medium mb-6 text-gray-800">État des tickets</h3>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <RechartsPieChart>
@@ -225,8 +223,8 @@ const AdminDashboard = () => {
                       </Pie>
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: "#1E293B", 
-                          borderColor: "#334155",
+                          backgroundColor: "white", 
+                          borderColor: "#e5e7eb",
                           borderRadius: "0.5rem" 
                         }}
                       />
@@ -235,8 +233,8 @@ const AdminDashboard = () => {
                 </div>
               </Card>
               
-              <Card className="p-6 glass-card border-none">
-                <h3 className="text-lg font-medium mb-6">Temps de réponse</h3>
+              <Card className="p-6 bg-white border-gray-200">
+                <h3 className="text-lg font-medium mb-6 text-gray-800">Temps de réponse</h3>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
@@ -248,8 +246,8 @@ const AdminDashboard = () => {
                       <YAxis dataKey="category" type="category" />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: "#1E293B", 
-                          borderColor: "#334155",
+                          backgroundColor: "white", 
+                          borderColor: "#e5e7eb",
                           borderRadius: "0.5rem" 
                         }}
                       />

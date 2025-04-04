@@ -63,8 +63,8 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-                // Custom color palette
-                darkblue: {
+                // Custom color palette - updated for white theme with blue accents
+                blue: {
                     50: '#EFF6FF',
                     100: '#DBEAFE',
                     200: '#BFDBFE',
@@ -75,7 +75,7 @@ export default {
                     700: '#1D4ED8',
                     800: '#1E40AF',
                     900: '#1E3A8A',
-                    950: '#0F172A',
+                    950: '#172554',
                 }
 			},
 			borderRadius: {
@@ -128,7 +128,7 @@ export default {
 			},
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                'blue-gradient': 'linear-gradient(90deg, #1E40AF 0%, #2563EB 100%)',
+                'blue-gradient': 'linear-gradient(90deg, #2563EB 0%, #60A5FA 100%)',
             }
 		}
 	},
