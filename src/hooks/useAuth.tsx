@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { authenticateUser, registerUser } from "../api/mongodb";
 
 type User = {
   id: string;
@@ -46,31 +47,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  // For demo purposes, we're using localStorage
-  // In a real app, you'd connect to your Django backend
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // This would be an API call to your Django backend
-      // const response = await fetch("YOUR_API_URL/login", {...})
+      const user = await authenticateUser(email, password);
       
-      // Simulating a successful login for demonstration
-      const mockUser = {
-        id: "1",
-        username: email.split('@')[0],
-        email,
-        isAdmin: email.includes('admin'),
-      };
-      
-      localStorage.setItem("user", JSON.stringify(mockUser));
-      setUser(mockUser);
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
       
       toast({
         title: "Connexion réussie",
         description: "Bienvenue sur l'IA Ticket Wizard",
       });
       
-      navigate(mockUser.isAdmin ? "/admin" : "/dashboard");
+      navigate(user.isAdmin ? "/admin" : "/dashboard");
     } catch (error) {
       toast({
         title: "Erreur de connexion",
@@ -86,19 +76,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signup = async (username: string, email: string, password: string) => {
     setLoading(true);
     try {
-      // This would be an API call to your Django backend
-      // const response = await fetch("YOUR_API_URL/signup", {...})
+      const user = await registerUser(username, email, password);
       
-      // Simulating a successful signup for demonstration
-      const mockUser = {
-        id: "1",
-        username,
-        email,
-        isAdmin: false,
-      };
-      
-      localStorage.setItem("user", JSON.stringify(mockUser));
-      setUser(mockUser);
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
       
       toast({
         title: "Inscription réussie",
@@ -106,10 +87,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
       
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Erreur d'inscription",
-        description: "Impossible de créer votre compte",
+        description: error.message || "Impossible de créer votre compte",
         variant: "destructive",
       });
       console.error("Signup error:", error);

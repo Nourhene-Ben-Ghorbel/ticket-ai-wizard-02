@@ -2,7 +2,9 @@
 import { useAuth } from "../hooks/useAuth";
 import { AuthForm } from "../components/AuthForm";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, MessageCircle } from "lucide-react";
 
 const Login = () => {
   const { login, loading, isAuthenticated, isAdmin } = useAuth();
@@ -19,12 +21,29 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-6 border border-gray-100">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-800">Connexion</h1>
-          <p className="text-gray-600 mt-2">
-            Connectez-vous pour accéder à votre compte
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center p-4 font-[Poppins]">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-blue-100 relative">
+        <div className="absolute top-4 left-4">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => navigate("/")}
+            className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
+          >
+            <ArrowLeft size={16} />
+            <span>Retour</span>
+          </Button>
+        </div>
+        
+        <div className="mb-8 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+              <MessageCircle size={24} className="text-white" />
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Connexion</h1>
+          <p className="text-gray-600">
+            Accédez à votre espace personnel
           </p>
         </div>
         <AuthForm type="login" onSubmit={handleSubmit} isLoading={loading} />

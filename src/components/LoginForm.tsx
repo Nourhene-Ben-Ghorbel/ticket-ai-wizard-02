@@ -3,9 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { PasswordInput } from "./PasswordInput";
 import { loginSchema, LoginFormValues } from "../lib/auth-schemas";
 
@@ -28,16 +28,16 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-gray-700">Email</FormLabel>
               <FormControl>
                 <Input 
                   type="email" 
                   placeholder="votre.email@exemple.com" 
                   {...field} 
-                  className="bg-white border-gray-200"
+                  className="bg-white border-blue-200 rounded-lg focus:border-blue-400 focus:ring-blue-400"
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -57,7 +57,7 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
         
         <Button 
           type="submit" 
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white" 
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md py-6" 
           disabled={isLoading}
         >
           {isLoading ? (
@@ -71,7 +71,7 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
         <div className="text-center text-sm">
           <p>
             Pas encore de compte ?{" "}
-            <Link to="/signup" className="text-blue-600 hover:underline">
+            <Link to="/signup" className="text-blue-600 hover:text-blue-700 hover:underline font-medium">
               Créer un compte
             </Link>
           </p>

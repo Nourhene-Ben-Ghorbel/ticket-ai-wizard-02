@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Loader2, RefreshCw, ThumbsUp, ThumbsDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { recordMessage } from "../api/mongodb";
 
 interface Message {
   id: string;
@@ -23,6 +25,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
   const [loading, setLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuth();
 
   // Add system greeting and initial message if provided
   useEffect(() => {
@@ -81,18 +84,15 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
     setLoading(true);
     
     try {
-      // In a real app, you would send the message to your Django backend:
-      // const response = await fetch('YOUR_API_URL/chat', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ message: input }),
-      // });
-      // const data = await response.json();
+      // Enregistrer le message dans MongoDB
+      if (user?.id) {
+        await recordMessage(user.id, input, "user");
+      }
       
-      // Simulate API delay
+      // Simuler un délai d'API
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      // Generate mock response based on input
+      // Générer une réponse en fonction de l'entrée
       let responseContent = "";
       
       if (input.toLowerCase().includes("doubl") || input.toLowerCase().includes("dupliqu")) {
@@ -113,6 +113,12 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
       };
       
       setMessages((prev) => [...prev, assistantMessage]);
+      
+      // Enregistrer la réponse dans MongoDB
+      if (user?.id) {
+        await recordMessage(user.id, responseContent, "assistant");
+      }
+      
     } catch (error) {
       console.error("Error sending message:", error);
       
@@ -144,8 +150,8 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           className={cn(
             "flex max-w-[80%] rounded-2xl p-4",
             isUser
-              ? "bg-blue-600 text-white rounded-tr-none"
-              : "bg-gray-100 text-gray-800 rounded-tl-none"
+              ? "bg-blue-600 text-white rounded-tr-none shadow-md"
+              : "bg-white text-gray-800 rounded-tl-none shadow-sm border border-blue-50"
           )}
         >
           <div className={cn("mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full", 
@@ -196,27 +202,27 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-13rem)] max-h-[800px] bg-white rounded-xl shadow-md border border-gray-200">
-      <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+    <div className="flex flex-col h-[calc(100vh-13rem)] max-h-[800px] bg-white rounded-xl shadow-lg border border-blue-100">
+      <div className="p-4 border-b border-blue-100 flex justify-between items-center bg-gradient-to-r from-blue-50 to-white">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-            <Bot size={18} className="text-blue-600" />
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+            <Bot size={20} className="text-blue-600" />
           </div>
           <h3 className="font-medium text-gray-800">Ticket AI Wizard</h3>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500">
+        <Button variant="outline" size="icon" className="h-8 w-8 text-gray-500 border-blue-100">
           <RefreshCw size={16} />
         </Button>
       </div>
       
-      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
+      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4 bg-gradient-to-br from-blue-50/30 to-white">
         <div className="flex flex-col">
           {messages.map((message) => (
             <MessageComponent key={message.id} message={message} />
           ))}
           {loading && (
             <div className="flex w-full mb-4 justify-start">
-              <div className="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-[80%] text-gray-800">
+              <div className="bg-white rounded-2xl rounded-tl-none p-4 max-w-[80%] text-gray-800 shadow-sm border border-blue-50">
                 <div className="flex items-center">
                   <div className="mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100">
                     <Bot size={16} className="text-blue-600" />
@@ -230,14 +236,14 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
         </div>
       </ScrollArea>
       
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-blue-100 bg-white">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Input
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Posez une question sur votre ticket..."
-            className="flex-1 border-gray-300 focus:border-blue-400"
+            className="flex-1 border-blue-200 focus:border-blue-400 rounded-lg"
             disabled={loading}
           />
           <Button 
@@ -245,7 +251,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
             size="icon" 
             disabled={loading || !input.trim()}
             className={cn(
-              "bg-blue-600 hover:bg-blue-700",
+              "bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md",
               !input.trim() && "opacity-50 cursor-not-allowed"
             )}
           >
