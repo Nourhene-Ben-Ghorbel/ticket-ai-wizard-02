@@ -1,97 +1,165 @@
 
-import { MongoClient, ServerApiVersion } from 'mongodb';
+// Browser-compatible mock MongoDB service
+// This simulates MongoDB functionality without using Node.js specific APIs
 
-// URI de connexion à MongoDB (à remplacer par votre URI réelle)
-const uri = "mongodb://localhost:27017";
+// In-memory database for development
+const inMemoryDb = {
+  users: [
+    {
+      id: "admin123",
+      username: "admin",
+      email: "admin@example.com",
+      password: "admin123",
+      isAdmin: true,
+      createdAt: new Date()
+    }
+  ],
+  signin_history: [],
+  messages: []
+};
 
-// Créez un MongoClient avec les options par défaut
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-// Fonction pour se connecter à MongoDB
-export async function connectToMongoDB() {
-  try {
-    await client.connect();
-    console.log("Connecté à MongoDB avec succès");
-    return client.db("Access");
-  } catch (error) {
-    console.error("Erreur de connexion à MongoDB:", error);
-    throw error;
-  }
+// Generate a simple UUID for IDs
+function generateId() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 }
 
-// Fonction pour enregistrer un nouvel utilisateur
+// Function to simulate connecting to MongoDB
+export async function connectToMongoDB() {
+  console.log("Simulating connection to MongoDB...");
+  return {
+    collection: (name: string) => {
+      // Return mock collection methods
+      return {
+        findOne: async (query: any) => {
+          console.log(`Searching in collection ${name} with query:`, query);
+          
+          if (name === "Users") {
+            return inMemoryDb.users.find(user => 
+              (query.email && user.email === query.email) &&
+              (query.password === undefined || user.password === query.password)
+            );
+          }
+          
+          return null;
+        },
+        insertOne: async (doc: any) => {
+          console.log(`Inserting in collection ${name}:`, doc);
+          const id = generateId();
+          
+          if (name === "Users") {
+            inMemoryDb.users.push({ ...doc, id });
+            return { insertedId: id };
+          } else if (name === "Historique_SignIn") {
+            inMemoryDb.signin_history.push({ ...doc, id });
+            return { insertedId: id };
+          } else if (name === "Historique_Messages") {
+            inMemoryDb.messages.push({ ...doc, id });
+            return { insertedId: id };
+          }
+          
+          return { insertedId: id };
+        },
+        find: (query: any) => {
+          console.log(`Finding in collection ${name} with query:`, query);
+          
+          // Mock for find().sort().toArray()
+          return {
+            sort: () => {
+              return {
+                toArray: async () => {
+                  if (name === "Historique_Messages" && query.userId) {
+                    return inMemoryDb.messages.filter(msg => msg.userId === query.userId);
+                  }
+                  return [];
+                }
+              };
+            }
+          };
+        }
+      };
+    }
+  };
+}
+
+// Mock client close function
+const client = {
+  close: async () => {
+    console.log("Simulating closing MongoDB connection");
+  }
+};
+
+// Function to register a new user
 export async function registerUser(username: string, email: string, password: string) {
   try {
     const db = await connectToMongoDB();
     const usersCollection = db.collection("Users");
     
-    // Vérifier si l'utilisateur existe déjà
+    // Check if user already exists
     const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
       throw new Error("Cet email est déjà utilisé");
     }
     
-    // Créer un nouvel utilisateur
+    // Create new user
     const newUser = {
       username,
       email,
-      password, // Note: Dans une application réelle, le mot de passe devrait être haché
+      password,
       isAdmin: false,
       createdAt: new Date()
     };
     
     const result = await usersCollection.insertOne(newUser);
-    console.log("Utilisateur enregistré avec l'ID:", result.insertedId);
+    console.log("User registered with ID:", result.insertedId);
     
-    // Enregistrer l'historique de connexion
+    // Record sign-in history
     await recordSignIn(email, "signup");
     
-    return { id: result.insertedId, username, email, isAdmin: false };
+    return { 
+      id: result.insertedId, 
+      username, 
+      email, 
+      isAdmin: false 
+    };
   } catch (error) {
-    console.error("Erreur lors de l'enregistrement de l'utilisateur:", error);
+    console.error("Error registering user:", error);
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
-// Fonction pour authentifier un utilisateur
+// Function to authenticate a user
 export async function authenticateUser(email: string, password: string) {
   try {
     const db = await connectToMongoDB();
     const usersCollection = db.collection("Users");
     
-    // Rechercher l'utilisateur
+    // Find user
     const user = await usersCollection.findOne({ email, password });
     
     if (!user) {
       throw new Error("Email ou mot de passe incorrect");
     }
     
-    // Enregistrer l'historique de connexion
+    // Record sign-in history
     await recordSignIn(email, "login");
     
     return {
-      id: user._id.toString(),
+      id: user.id,
       username: user.username,
       email: user.email,
       isAdmin: user.isAdmin || false
     };
   } catch (error) {
-    console.error("Erreur lors de l'authentification:", error);
+    console.error("Authentication error:", error);
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
-// Fonction pour enregistrer l'historique de connexion
+// Function to record sign-in history
 export async function recordSignIn(email: string, type: "login" | "signup") {
   try {
     const db = await connectToMongoDB();
@@ -103,13 +171,13 @@ export async function recordSignIn(email: string, type: "login" | "signup") {
       timestamp: new Date()
     });
     
-    console.log(`Historique de ${type} enregistré pour ${email}`);
+    console.log(`Sign-in history recorded for ${email} (${type})`);
   } catch (error) {
-    console.error("Erreur lors de l'enregistrement de l'historique:", error);
+    console.error("Error recording sign-in history:", error);
   }
 }
 
-// Fonction pour enregistrer un message
+// Function to record a message
 export async function recordMessage(userId: string, content: string, role: "user" | "assistant") {
   try {
     const db = await connectToMongoDB();
@@ -122,15 +190,13 @@ export async function recordMessage(userId: string, content: string, role: "user
       timestamp: new Date()
     });
     
-    console.log("Message enregistré pour l'utilisateur:", userId);
+    console.log("Message recorded for user:", userId);
   } catch (error) {
-    console.error("Erreur lors de l'enregistrement du message:", error);
-  } finally {
-    await client.close();
+    console.error("Error recording message:", error);
   }
 }
 
-// Fonction pour récupérer l'historique des messages d'un utilisateur
+// Function to get user messages
 export async function getUserMessages(userId: string) {
   try {
     const db = await connectToMongoDB();
@@ -143,9 +209,7 @@ export async function getUserMessages(userId: string) {
     
     return messages;
   } catch (error) {
-    console.error("Erreur lors de la récupération des messages:", error);
+    console.error("Error fetching user messages:", error);
     return [];
-  } finally {
-    await client.close();
   }
 }

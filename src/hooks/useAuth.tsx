@@ -52,8 +52,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const user = await authenticateUser(email, password);
       
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      // Ensure the user object has id as a string
+      const userWithStringId = {
+        ...user,
+        id: user.id.toString()
+      };
+      
+      localStorage.setItem("user", JSON.stringify(userWithStringId));
+      setUser(userWithStringId);
       
       toast({
         title: "Connexion réussie",
@@ -78,8 +84,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const user = await registerUser(username, email, password);
       
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      // Ensure the user object has id as a string
+      const userWithStringId = {
+        ...user,
+        id: user.id.toString()
+      };
+      
+      localStorage.setItem("user", JSON.stringify(userWithStringId));
+      setUser(userWithStringId);
       
       toast({
         title: "Inscription réussie",
