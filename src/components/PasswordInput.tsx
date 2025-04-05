@@ -2,54 +2,47 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { FormControl, FormItem, FormLabel, FormMessage, useFormField } from "./ui/form";
 import { Control } from "react-hook-form";
 
 interface PasswordInputProps {
-  control: Control<any>;
+  control?: Control<any>;
   name: string;
   label: string;
-  placeholder?: string;
 }
 
-export const PasswordInput = ({ 
-  control, 
-  name, 
-  label, 
-  placeholder = "••••••••" 
-}: PasswordInputProps) => {
+export const PasswordInput = ({ control, name, label, ...props }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  
+  const { error } = useFormField();
+
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <div className="relative">
-              <Input 
-                type={showPassword ? "text" : "password"} 
-                placeholder={placeholder} 
-                {...field} 
-                className="pr-10 bg-white border-gray-200"
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </Button>
-            </div>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <FormItem>
+      <FormLabel>{label}</FormLabel>
+      <div className="relative">
+        <FormControl>
+          <Input
+            type={showPassword ? "text" : "password"}
+            className="pr-10 bg-white border-gray-200"
+            {...props}
+          />
+        </FormControl>
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+          tabIndex={-1}
+        >
+          {showPassword ? (
+            <EyeOff className="h-4 w-4" />
+          ) : (
+            <Eye className="h-4 w-4" />
+          )}
+          <span className="sr-only">
+            {showPassword ? "Hide password" : "Show password"}
+          </span>
+        </button>
+      </div>
+      <FormMessage />
+    </FormItem>
   );
 };
