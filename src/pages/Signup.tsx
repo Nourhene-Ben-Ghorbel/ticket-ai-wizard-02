@@ -3,6 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { AuthForm } from "../components/AuthForm";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { SignupFormValues } from "../lib/auth-schemas";
 
 const Signup = () => {
   const { signup, loading, isAuthenticated } = useAuth();
@@ -14,7 +15,7 @@ const Signup = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = async (values: { username: string; email: string; password: string }) => {
+  const handleSubmit = async (values: SignupFormValues) => {
     await signup(values.username, values.email, values.password);
   };
 

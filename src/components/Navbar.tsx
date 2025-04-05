@@ -97,10 +97,10 @@ export const Navbar = () => {
             
             {!isAuthenticated && (
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" className="text-gray-600 hover:text-blue-600" asChild>
+                <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
                   <Link to="/login">Se connecter</Link>
                 </Button>
-                <Button className="bg-blue-600 hover:bg-blue-700" asChild>
+                <Button className="bg-blue-600 hover:bg-blue-700">
                   <Link to="/signup">S'inscrire</Link>
                 </Button>
               </div>
@@ -157,10 +157,10 @@ export const Navbar = () => {
             
             {!isAuthenticated && (
               <div className="flex flex-col space-y-2">
-                <Button variant="ghost" className="w-full text-gray-600" asChild>
+                <Button variant="ghost" className="w-full text-gray-600">
                   <Link to="/login">Se connecter</Link>
                 </Button>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700" asChild>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
                   <Link to="/signup">S'inscrire</Link>
                 </Button>
               </div>

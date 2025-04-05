@@ -17,7 +17,12 @@ interface SignupFormProps {
 export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
-    defaultValues: { username: "", email: "", password: "", confirmPassword: "" },
+    defaultValues: { 
+      username: "", 
+      email: "", 
+      password: "", 
+      confirmPassword: "" 
+    },
   });
 
   return (
