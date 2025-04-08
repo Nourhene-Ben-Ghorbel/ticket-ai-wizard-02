@@ -19,6 +19,12 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Montserrat', 'sans-serif'],
+				serif: ['Playfair Display', 'serif'],
+				montserrat: ['Montserrat', 'sans-serif'],
+				playfair: ['Playfair Display', 'serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -54,10 +60,10 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				cosmic: {
-					dark: '#0b1440',
-					DEFAULT: '#192657',
-					light: '#2d3e85',
-					accent: '#6246ea'
+					dark: '#0f172a',
+					DEFAULT: '#1e3a8a',
+					light: '#3b82f6',
+					accent: '#60a5fa'
 				},
 				blue: {
                     50: '#EFF6FF',
@@ -77,11 +83,6 @@ export default {
 					500: '#6366f1',
 					600: '#4f46e5',
 					900: '#1e1b4b'
-				},
-				violet: {
-					400: '#a78bfa',
-					600: '#7c3aed',
-					900: '#4c1d95'
 				}
 			},
 			borderRadius: {
@@ -145,13 +146,13 @@ export default {
 			},
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                'cosmic-gradient': 'linear-gradient(180deg, #192657 0%, #0b1440 100%)',
-				'cosmic-card': 'linear-gradient(120deg, rgba(25,38,87,0.5) 0%, rgba(11,20,64,0.7) 100%)',
-				'button-gradient': 'linear-gradient(90deg, #4f46e5 0%, #6246ea 100%)',
+                'cosmic-gradient': 'linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%)',
+				'cosmic-card': 'linear-gradient(120deg, rgba(30,58,138,0.4) 0%, rgba(15,23,42,0.6) 100%)',
+				'button-gradient': 'linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)',
             },
 			boxShadow: {
-				'cosmic': '0 4px 20px rgba(0, 0, 255, 0.15)',
-				'neon': '0 0 10px rgba(98, 70, 234, 0.5), 0 0 20px rgba(98, 70, 234, 0.3)',
+				'cosmic': '0 4px 20px rgba(37, 99, 235, 0.15)',
+				'neon': '0 0 10px rgba(37, 99, 235, 0.5), 0 0 20px rgba(37, 99, 235, 0.3)',
 			},
 		}
 	},

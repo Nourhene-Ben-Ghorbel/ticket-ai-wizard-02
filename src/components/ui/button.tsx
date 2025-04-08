@@ -18,12 +18,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
           {
-            "bg-gradient-to-r from-blue-600 to-indigo-700 text-white hover:shadow-lg hover:shadow-indigo-600/20": variant === "default",
+            "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-lg hover:shadow-blue-600/20": variant === "default",
             "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
-            "border border-indigo-400/30 bg-transparent text-white hover:bg-indigo-900/30": variant === "outline",
-            "bg-indigo-900/50 text-indigo-300 hover:bg-indigo-800/50": variant === "secondary",
-            "text-blue-200/80 hover:text-indigo-300 hover:bg-indigo-900/30": variant === "ghost",
-            "text-indigo-400 underline-offset-4 hover:underline": variant === "link",
+            "border border-blue-400/30 bg-transparent text-white hover:bg-blue-900/30": variant === "outline",
+            "bg-blue-900/30 text-blue-100 hover:bg-blue-800/30": variant === "secondary",
+            "text-blue-100 hover:text-white hover:bg-blue-900/30": variant === "ghost",
+            "text-blue-400 underline-offset-4 hover:underline": variant === "link",
           },
           {
             "h-10 py-2 px-4": size === "default",
@@ -48,12 +48,12 @@ export const buttonVariants = (props?: Partial<ButtonProps>) => {
   return cn(
     "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
     {
-      "bg-gradient-to-r from-blue-600 to-indigo-700 text-white hover:shadow-lg hover:shadow-indigo-600/20": variant === "default",
+      "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-lg hover:shadow-blue-600/20": variant === "default",
       "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
-      "border border-indigo-400/30 bg-transparent text-white hover:bg-indigo-900/30": variant === "outline",
-      "bg-indigo-900/50 text-indigo-300 hover:bg-indigo-800/50": variant === "secondary",
-      "text-blue-200/80 hover:text-indigo-300 hover:bg-indigo-900/30": variant === "ghost",
-      "text-indigo-400 underline-offset-4 hover:underline": variant === "link",
+      "border border-blue-400/30 bg-transparent text-white hover:bg-blue-900/30": variant === "outline",
+      "bg-blue-900/30 text-blue-100 hover:bg-blue-800/30": variant === "secondary",
+      "text-blue-100 hover:text-white hover:bg-blue-900/30": variant === "ghost",
+      "text-blue-400 underline-offset-4 hover:underline": variant === "link",
     },
     {
       "h-10 py-2 px-4": size === "default",
