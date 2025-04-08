@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 230 83% 12%;
+    --background: 242 83% 12%;
     --foreground: 210 40% 98%;
 
-    --card: 230 75% 15%;
+    --card: 242 75% 15%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 230 83% 12%;
+    --popover: 242 83% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 220 100% 70%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 246 100% 74%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 50% 30%;
+    --secondary: 250 50% 30%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 230 40% 20%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 242 40% 20%;
+    --muted-foreground: 215 20% 85%;
 
-    --accent: 260 50% 60%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 270 50% 65%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 230 30% 30%;
-    --input: 230 30% 30%;
-    --ring: 220 100% 70%;
+    --border: 242 30% 40%;
+    --input: 242 30% 40%;
+    --ring: 246 100% 74%;
     --radius: 1rem;
   }
 }
@@ -50,39 +50,39 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    background: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(240, 80%, 8%) 100%);
+    background: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(250, 80%, 8%) 100%);
     min-height: 100vh;
   }
 }
 
 .cosmic-card {
-  @apply bg-card/70 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg;
-  box-shadow: 0 4px 30px rgba(0, 0, 255, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  @apply bg-card/70 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg;
+  box-shadow: 0 4px 30px rgba(88, 80, 236, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
 }
 
 .cosmic-input {
-  @apply bg-background/30 backdrop-blur-sm border border-white/20 text-foreground placeholder:text-white/50 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary/50;
+  @apply bg-background/30 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/60 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary/50;
 }
 
 .cosmic-button {
-  @apply bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg shadow-lg shadow-blue-500/20 hover:shadow-blue-600/30 transition-all duration-300;
+  @apply bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700 text-white rounded-lg shadow-lg shadow-violet-500/30 hover:shadow-violet-600/40 transition-all duration-300;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .glass-card {
-  @apply bg-white/10 backdrop-blur-md border border-white/10 rounded-xl shadow-lg;
+  @apply bg-white/15 backdrop-blur-md border border-white/20 rounded-xl shadow-lg;
 }
 
 .text-glow {
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
 }
 
 .text-gradient {
-  @apply bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent;
 }
 
 .cosmic-gradient {
-  @apply bg-gradient-to-br from-blue-900 via-indigo-900 to-violet-900;
+  @apply bg-gradient-to-br from-indigo-900 via-violet-900 to-purple-900;
 }
 
 .hover-scale {
@@ -116,7 +116,7 @@
   background: linear-gradient(
     to bottom right,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.4) 50%,
     rgba(255, 255, 255, 0) 100%
   );
   transform: rotate(45deg);
@@ -136,4 +136,35 @@
 
 .space-mask {
   mask-image: radial-gradient(circle at center, black 40%, transparent 70%);
+}
+
+/* Ajout de nouvelles classes pour améliorer les contrastes */
+.text-cosmic {
+  @apply text-white;
+  text-shadow: 0 0 8px rgba(115, 103, 240, 0.6);
+}
+
+.input-cosmic {
+  @apply bg-white/10 border-white/30 text-white placeholder:text-white/50;
+}
+
+.label-cosmic {
+  @apply text-white font-medium;
+  text-shadow: 0 0 5px rgba(115, 103, 240, 0.4);
+}
+
+/* Animation pour les éléments cosmiques */
+.cosmic-pulse {
+  animation: cosmic-pulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes cosmic-pulse {
+  0% {
+    opacity: 0.7;
+    filter: brightness(0.8) saturate(0.9);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1.2) saturate(1.1);
+  }
 }

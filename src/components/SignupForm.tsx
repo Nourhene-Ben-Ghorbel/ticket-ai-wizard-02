@@ -33,15 +33,15 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-blue-100">Nom d'utilisateur</FormLabel>
+              <FormLabel className="label-cosmic">Nom d'utilisateur</FormLabel>
               <FormControl>
                 <Input 
                   placeholder="Entrez votre nom d'utilisateur" 
                   {...field} 
-                  className="cosmic-input"
+                  className="cosmic-input text-white"
                 />
               </FormControl>
-              <FormMessage className="text-red-400" />
+              <FormMessage className="text-red-300" />
             </FormItem>
           )}
         />
@@ -51,16 +51,16 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-blue-100">Email</FormLabel>
+              <FormLabel className="label-cosmic">Email</FormLabel>
               <FormControl>
                 <Input 
                   type="email" 
                   placeholder="votre.email@exemple.com" 
                   {...field} 
-                  className="cosmic-input"
+                  className="cosmic-input text-white"
                 />
               </FormControl>
-              <FormMessage className="text-red-400" />
+              <FormMessage className="text-red-300" />
             </FormItem>
           )}
         />
@@ -74,8 +74,8 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
               name="password" 
               label="Mot de passe" 
               {...field}
-              labelClass="text-blue-100"
-              inputClass="cosmic-input"
+              labelClass="label-cosmic"
+              inputClass="cosmic-input text-white"
             />
           )}
         />
@@ -89,8 +89,8 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
               name="confirmPassword" 
               label="Confirmer le mot de passe" 
               {...field}
-              labelClass="text-blue-100"
-              inputClass="cosmic-input"
+              labelClass="label-cosmic"
+              inputClass="cosmic-input text-white"
             />
           )}
         />
@@ -108,11 +108,11 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
               </>
             ) : "S'inscrire"}
           </span>
-          <span className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+          <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
         </Button>
         
         <div className="text-center text-sm">
-          <p className="text-blue-100/80">
+          <p className="text-white">
             Déjà un compte ?{" "}
             <Link to="/login" className="text-indigo-300 hover:text-indigo-200 hover:underline font-medium">
               Se connecter
