@@ -20,7 +20,8 @@ const inMemoryDb: Record<string, any[]> = {
       isAdmin: false 
     }
   ],
-  tickets: []
+  tickets: [],
+  messages: []
 };
 
 // Simule la connexion à MongoDB
@@ -150,6 +151,83 @@ const getCollection = (name: string) => {
       return inMemoryDb[name].length;
     }
   };
+};
+
+// Fonction pour authentifier un utilisateur
+export const authenticateUser = async (email: string, password: string) => {
+  console.log(`Authenticating user with email: ${email}`);
+  
+  // Simuler une légère latence réseau
+  await new Promise(resolve => setTimeout(resolve, 300));
+  
+  // Rechercher l'utilisateur
+  const userCollection = getCollection('users');
+  const user = await userCollection.findOne({ email, password });
+  
+  if (!user) {
+    throw new Error('Email ou mot de passe incorrect');
+  }
+  
+  // Retourner les informations de l'utilisateur (sans le mot de passe)
+  return {
+    id: user._id,
+    username: user.username,
+    email: user.email,
+    isAdmin: user.isAdmin || false
+  };
+};
+
+// Fonction pour enregistrer un nouvel utilisateur
+export const registerUser = async (username: string, email: string, password: string) => {
+  console.log(`Registering new user: ${username}, ${email}`);
+  
+  // Simuler une légère latence réseau
+  await new Promise(resolve => setTimeout(resolve, 300));
+  
+  // Vérifier si l'utilisateur existe déjà
+  const userCollection = getCollection('users');
+  const existingUser = await userCollection.findOne({ email });
+  
+  if (existingUser) {
+    throw new Error('Un utilisateur avec cet email existe déjà');
+  }
+  
+  // Créer un nouvel utilisateur
+  const newUser = {
+    username,
+    email,
+    password,
+    isAdmin: false,
+    createdAt: new Date()
+  };
+  
+  const result = await userCollection.insertOne(newUser);
+  
+  // Retourner les informations de l'utilisateur (sans le mot de passe)
+  return {
+    id: result.insertedId,
+    username,
+    email,
+    isAdmin: false
+  };
+};
+
+// Fonction pour enregistrer un message
+export const recordMessage = async (userId: string, content: string, role: string) => {
+  console.log(`Recording message from user ${userId}: ${content}`);
+  
+  const messageCollection = getCollection('messages');
+  
+  const newMessage = {
+    userId,
+    content,
+    role,
+    timestamp: new Date()
+  };
+  
+  await messageCollection.insertOne(newMessage);
+  
+  return true;
 };
 
 // Export une fonction pour réinitialiser la base de données (utile pour les tests)
