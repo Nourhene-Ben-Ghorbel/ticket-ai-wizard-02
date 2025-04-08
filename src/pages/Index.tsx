@@ -32,7 +32,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen text-white font-['Space_Grotesk'] relative overflow-hidden">
+    <div className="min-h-screen text-white font-['Montserrat'] relative overflow-hidden">
       <StarfieldBackground />
       <CosmicElements />
       
@@ -48,9 +48,9 @@ const Index = () => {
             className="mb-8 flex justify-center"
             variants={itemVariants}
           >
-            <div className="w-20 h-20 rounded-full bg-indigo-600 flex items-center justify-center shadow-neon relative animate-pulse-slow">
+            <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center shadow-neon relative animate-pulse-slow">
               <MessageCircle size={40} className="text-white" />
-              <div className="absolute inset-0 rounded-full bg-indigo-600 blur-md opacity-50"></div>
+              <div className="absolute inset-0 rounded-full bg-blue-500 blur-md opacity-50"></div>
               <Star className="absolute -top-1 -right-1 text-yellow-300 animate-twinkle" size={16} />
             </div>
           </motion.div>
@@ -63,7 +63,7 @@ const Index = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-lg text-blue-100/80 mb-10 max-w-xl mx-auto"
+            className="text-lg text-blue-100 mb-10 max-w-xl mx-auto"
             variants={itemVariants}
           >
             Explorez l'univers des tickets avec notre intelligence artificielle avancée
@@ -83,19 +83,19 @@ const Index = () => {
                     <LogIn size={18} className="text-white" />
                     <span>Se connecter</span>
                   </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </Button>
                 
                 <Button 
                   variant="outline" 
-                  className="text-lg px-8 py-7 border-2 border-indigo-400/30 text-white hover:bg-indigo-900/30 rounded-lg transition-all duration-300 backdrop-blur-sm relative"
+                  className="text-lg px-8 py-7 border border-white/20 text-white hover:bg-white/5 rounded-lg transition-all duration-300 backdrop-blur-sm relative"
                   onClick={() => navigate("/signup")}
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <UserPlus size={18} className="text-white" />
                     <span>Créer un compte</span>
                   </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-violet-600/10 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
                 </Button>
               </>
             ) : (
@@ -104,21 +104,21 @@ const Index = () => {
                 onClick={() => navigate(isAdmin ? "/admin" : "/dashboard")}
               >
                 <span className="relative z-10">Accéder à mon tableau de bord</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               </Button>
             )}
           </motion.div>
           
           <motion.div 
-            className="mt-16 text-sm text-blue-200/50"
+            className="mt-16 text-sm text-blue-200/70"
             variants={itemVariants}
           >
             <p>© 2025 IA Ticket Wizard. Tous droits réservés.</p>
           </motion.div>
         </motion.div>
 
-        <GlowingOrb className="top-1/3 left-1/4 -z-10" size={200} color="rgba(79, 70, 229, 0.2)" />
-        <GlowingOrb className="bottom-1/4 right-1/4 -z-10" size={300} color="rgba(124, 58, 237, 0.15)" />
+        <GlowingOrb className="top-1/3 left-1/4 -z-10" size={200} color="rgba(59, 130, 246, 0.2)" />
+        <GlowingOrb className="bottom-1/4 right-1/4 -z-10" size={200} color="rgba(96, 165, 250, 0.15)" />
       </div>
     </div>
   );

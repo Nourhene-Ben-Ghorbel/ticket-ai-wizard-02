@@ -9,10 +9,10 @@ export const GlowingOrb: React.FC<{
 }> = ({ className, size = 70, color = "#3b82f6" }) => {
   return (
     <motion.div
-      className={`absolute rounded-full blur-2xl opacity-30 ${className}`}
+      className={`absolute rounded-full blur-2xl opacity-20 ${className}`}
       animate={{
         scale: [1, 1.1, 1],
-        opacity: [0.3, 0.4, 0.3],
+        opacity: [0.2, 0.3, 0.2],
       }}
       transition={{
         duration: 8,
@@ -94,7 +94,7 @@ export const Comet: React.FC<{
   );
 };
 
-// Constellation with blue theme
+// Minimal constellation with blue theme
 export const Constellation: React.FC<{
   className?: string;
   points?: number;
@@ -163,7 +163,7 @@ export const Constellation: React.FC<{
   );
 };
 
-// Professional blue nebula
+// Very subtle nebula
 export const Nebula: React.FC<{
   className?: string;
   color?: string;
@@ -174,7 +174,7 @@ export const Nebula: React.FC<{
       className={`absolute rounded-full blur-3xl ${className}`}
       animate={{
         scale: [1, 1.1, 1],
-        opacity: [0.1, 0.15, 0.1],
+        opacity: [0.05, 0.08, 0.05],
       }}
       transition={{
         duration: 10,
@@ -184,7 +184,7 @@ export const Nebula: React.FC<{
       style={{
         width: size,
         height: size * 0.6,
-        background: `radial-gradient(ellipse at center, ${color}22 0%, ${color}11 50%, transparent 100%)`,
+        background: `radial-gradient(ellipse at center, ${color}15 0%, ${color}08 50%, transparent 100%)`,
         transform: 'rotate(15deg)',
       }}
     />
@@ -194,23 +194,21 @@ export const Nebula: React.FC<{
 export const CosmicElements: React.FC = () => {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      <GlowingOrb className="top-[10%] left-[15%]" color="#60a5fa" size={140} />
-      <GlowingOrb className="top-[60%] left-[80%]" color="#3b82f6" size={120} />
-      <GlowingOrb className="top-[75%] left-[20%]" color="#2563eb" size={100} />
+      {/* Minimal glowing orbs */}
+      <GlowingOrb className="top-[10%] left-[15%]" color="#485bbd" size={140} />
+      <GlowingOrb className="bottom-[20%] left-[10%]" color="#3944a0" size={100} />
       
-      <Planet className="top-[8%] right-[15%]" size={25} color="#60a5fa" />
-      <Planet className="bottom-[20%] left-[8%]" size={15} color="#93c5fd" />
+      {/* Small planet */}
+      <Planet className="top-[8%] right-[15%]" size={20} color="#8b5cf6" />
       
+      {/* A few shooting stars */}
       <ShootingStar className="top-[15%] left-[30%]" />
-      <ShootingStar className="top-[40%] left-[70%]" />
       
-      <Comet className="top-[5%] left-[5%]" />
-      
+      {/* Very subtle nebula */}
       <Nebula className="top-[30%] left-[60%]" color="#3b82f6" size={250} />
-      <Nebula className="bottom-[60%] right-[70%]" color="#60a5fa" size={200} />
       
-      <Constellation className="top-[45%] right-[25%]" points={6} />
-      <Constellation className="bottom-[30%] left-[40%]" points={4} />
+      {/* A single constellation for subtle detail */}
+      <Constellation className="top-[45%] right-[25%]" points={4} />
     </div>
   );
 };

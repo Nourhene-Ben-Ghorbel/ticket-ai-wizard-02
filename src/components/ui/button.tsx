@@ -18,11 +18,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
           {
-            "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-lg hover:shadow-blue-600/20": variant === "default",
+            "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-lg hover:shadow-blue-500/20": variant === "default",
             "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
-            "border border-blue-400/30 bg-transparent text-white hover:bg-blue-900/30": variant === "outline",
-            "bg-blue-900/30 text-blue-100 hover:bg-blue-800/30": variant === "secondary",
-            "text-blue-100 hover:text-white hover:bg-blue-900/30": variant === "ghost",
+            "border border-white/20 bg-transparent text-white hover:bg-white/5": variant === "outline",
+            "bg-white/10 text-white hover:bg-white/15": variant === "secondary",
+            "text-white hover:text-white hover:bg-white/10": variant === "ghost",
             "text-blue-400 underline-offset-4 hover:underline": variant === "link",
           },
           {
@@ -48,11 +48,11 @@ export const buttonVariants = (props?: Partial<ButtonProps>) => {
   return cn(
     "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
     {
-      "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-lg hover:shadow-blue-600/20": variant === "default",
+      "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-lg hover:shadow-blue-500/20": variant === "default",
       "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
-      "border border-blue-400/30 bg-transparent text-white hover:bg-blue-900/30": variant === "outline",
-      "bg-blue-900/30 text-blue-100 hover:bg-blue-800/30": variant === "secondary",
-      "text-blue-100 hover:text-white hover:bg-blue-900/30": variant === "ghost",
+      "border border-white/20 bg-transparent text-white hover:bg-white/5": variant === "outline",
+      "bg-white/10 text-white hover:bg-white/15": variant === "secondary",
+      "text-white hover:text-white hover:bg-white/10": variant === "ghost",
       "text-blue-400 underline-offset-4 hover:underline": variant === "link",
     },
     {

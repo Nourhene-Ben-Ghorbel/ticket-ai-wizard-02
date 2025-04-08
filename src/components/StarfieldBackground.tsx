@@ -29,22 +29,20 @@ export const StarfieldBackground: React.FC = () => {
       initStars();
     };
     
-    // More professional star colors with blue tones
+    // More subtle star colors focused on blue/white
     const starColors = [
       '#ffffff', // White
       '#d8e8ff', // Soft light blue
       '#b3d1ff', // Light blue
-      '#8ab8ff', // Medium blue
-      '#e6ecf5'  // Very light blue-gray
     ];
     
-    // Initialize stars with a more subtle, professional appearance
+    // Initialize stars with a cleaner, darker appearance
     const initStars = () => {
       stars.current = [];
       // Fewer stars for a cleaner look
       for (let i = 0; i < 150; i++) {
         const starColor = starColors[Math.floor(Math.random() * starColors.length)];
-        const size = Math.random() * 1.8 + 0.4; // Smaller stars
+        const size = Math.random() * 1.5 + 0.3; // Smaller stars
         
         stars.current.push({
           x: Math.random() * canvas.width,
@@ -52,38 +50,36 @@ export const StarfieldBackground: React.FC = () => {
           size: size,
           opacity: Math.random() * 0.6 + 0.2, // More subtle opacity
           color: starColor,
-          speed: Math.random() * 0.06 + 0.01 // Slightly slower movement
+          speed: Math.random() * 0.04 + 0.01 // Slower movement
         });
       }
     };
     
-    // Create a more subtle gradient background
+    // Create a darker blue gradient background
     const drawBackground = () => {
-      // More professional dark blue gradient
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2, canvas.height / 2, 0,
-        canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height) / 1.5
+      // Dark blue gradient as shown in the image
+      const gradient = ctx.createLinearGradient(
+        0, 0, 0, canvas.height
       );
-      gradient.addColorStop(0, 'rgba(15, 23, 42, 0.95)'); // Darker center - slate-900
-      gradient.addColorStop(1, 'rgba(8, 15, 30, 1)');     // Very dark blue edge
+      gradient.addColorStop(0, '#050b24'); // Very dark blue at top
+      gradient.addColorStop(1, '#040c30');     // Still dark blue but slightly different
       
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
     
-    // Add subtle cosmic clouds
+    // Add subtle cosmic clouds (very faint)
     const drawClouds = () => {
-      for (let i = 0; i < 3; i++) { // Fewer clouds
+      for (let i = 0; i < 2; i++) { // Fewer clouds
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
         const radius = Math.random() * 120 + 50;
         
         const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
         
-        // Professional blue cloud color
-        const hue = Math.random() * 20 + 210; // Blue range
-        gradient.addColorStop(0, `hsla(${hue}, 60%, 30%, 0.03)`); // Much more subtle
-        gradient.addColorStop(1, `hsla(${hue}, 60%, 20%, 0)`);
+        // Dark blue cloud color, very subtle
+        gradient.addColorStop(0, 'rgba(20, 40, 100, 0.03)'); // Much more subtle
+        gradient.addColorStop(1, 'rgba(10, 20, 60, 0)');
         
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -107,16 +103,8 @@ export const StarfieldBackground: React.FC = () => {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         
-        // More subtle glow effect
-        const gradient = ctx.createRadialGradient(
-          star.x, star.y, 0,
-          star.x, star.y, star.size * 1.5
-        );
-        gradient.addColorStop(0, star.color);
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        
         ctx.fillStyle = `${star.color}${Math.floor(star.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.shadowBlur = star.size * 1.5;
+        ctx.shadowBlur = star.size * 1.2;
         ctx.shadowColor = star.color;
         ctx.fill();
         ctx.shadowBlur = 0;
