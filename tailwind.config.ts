@@ -53,18 +53,13 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+				cosmic: {
+					dark: '#0b1440',
+					DEFAULT: '#192657',
+					light: '#2d3e85',
+					accent: '#6246ea'
 				},
-                // Custom color palette - updated for white theme with blue accents
-                blue: {
+				blue: {
                     50: '#EFF6FF',
                     100: '#DBEAFE',
                     200: '#BFDBFE',
@@ -76,7 +71,18 @@ export default {
                     800: '#1E40AF',
                     900: '#1E3A8A',
                     950: '#172554',
-                }
+                },
+				indigo: {
+					100: '#e0e7ff',
+					500: '#6366f1',
+					600: '#4f46e5',
+					900: '#1e1b4b'
+				},
+				violet: {
+					400: '#a78bfa',
+					600: '#7c3aed',
+					900: '#4c1d95'
+				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -116,7 +122,16 @@ export default {
                 'pulse-slow': {
                     '0%, 100%': { opacity: '1' },
                     '50%': { opacity: '0.8' },
-                }
+                },
+				'twinkle': {
+					'0%, 100%': { opacity: '0.2' },
+					'50%': { opacity: '0.8' },
+				},
+				'shooting-star': {
+					'0%': { transform: 'translateX(0) translateY(0)', opacity: '0' },
+					'10%': { opacity: '1' },
+					'100%': { transform: 'translateX(300px) translateY(300px)', opacity: '0' },
+				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -125,11 +140,19 @@ export default {
                 'wave': 'wave 20s -10s linear infinite',
                 'shimmer': 'shimmer 2s infinite linear',
                 'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
+				'twinkle': 'twinkle 3s ease-in-out infinite',
+				'shooting-star': 'shooting-star 5s ease-in-out infinite',
 			},
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                'blue-gradient': 'linear-gradient(90deg, #2563EB 0%, #60A5FA 100%)',
-            }
+                'cosmic-gradient': 'linear-gradient(180deg, #192657 0%, #0b1440 100%)',
+				'cosmic-card': 'linear-gradient(120deg, rgba(25,38,87,0.5) 0%, rgba(11,20,64,0.7) 100%)',
+				'button-gradient': 'linear-gradient(90deg, #4f46e5 0%, #6246ea 100%)',
+            },
+			boxShadow: {
+				'cosmic': '0 4px 20px rgba(0, 0, 255, 0.15)',
+				'neon': '0 0 10px rgba(98, 70, 234, 0.5), 0 0 20px rgba(98, 70, 234, 0.3)',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

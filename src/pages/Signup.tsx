@@ -2,10 +2,13 @@
 import { useAuth } from "../hooks/useAuth";
 import { AuthForm } from "../components/AuthForm";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { SignupFormValues } from "../lib/auth-schemas";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageCircle } from "lucide-react";
+import { ArrowLeft, MessageCircle, Star } from "lucide-react";
+import StarfieldBackground from "@/components/StarfieldBackground";
+import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
+import { motion } from "framer-motion";
 
 const Signup = () => {
   const { signup, loading, isAuthenticated } = useAuth();
@@ -22,14 +25,22 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center p-4 font-[Poppins]">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-blue-100 relative">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-['Space_Grotesk'] relative">
+      <StarfieldBackground />
+      <CosmicElements />
+      
+      <motion.div 
+        className="w-full max-w-md cosmic-card p-8 relative z-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <div className="absolute top-4 left-4">
           <Button 
             variant="ghost" 
             size="sm"
             onClick={() => navigate("/")}
-            className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
+            className="flex items-center gap-1 text-blue-300 hover:text-blue-100 hover:bg-white/5"
           >
             <ArrowLeft size={16} />
             <span>Retour</span>
@@ -37,18 +48,49 @@ const Signup = () => {
         </div>
         
         <div className="mb-8 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-              <MessageCircle size={24} className="text-white" />
+          <motion.div 
+            className="flex justify-center mb-4"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center shadow-neon relative">
+              <MessageCircle size={32} className="text-white" />
+              <div className="absolute inset-0 rounded-full bg-indigo-600 blur-md opacity-50"></div>
+              <Star className="absolute -top-1 -right-1 text-yellow-300 animate-twinkle" size={14} />
             </div>
-          </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Créer un compte</h1>
-          <p className="text-gray-600">
-            Rejoignez notre plateforme d'IA
-          </p>
+          </motion.div>
+          
+          <motion.h1 
+            className="text-3xl font-bold text-white mb-2 text-glow"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            Créer un compte
+          </motion.h1>
+          
+          <motion.p 
+            className="text-blue-200/80"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            Rejoignez notre voyage cosmique
+          </motion.p>
         </div>
-        <AuthForm type="signup" onSubmit={handleSubmit} isLoading={loading} />
-      </div>
+        
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          <AuthForm type="signup" onSubmit={handleSubmit} isLoading={loading} />
+        </motion.div>
+      </motion.div>
+      
+      <GlowingOrb className="top-1/4 right-1/4 -z-10" size={200} color="rgba(79, 70, 229, 0.15)" />
+      <GlowingOrb className="bottom-1/4 left-1/4 -z-10" size={150} color="rgba(124, 58, 237, 0.1)" />
     </div>
   );
 };

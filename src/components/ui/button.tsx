@@ -16,14 +16,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
+          "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
           {
-            "bg-blue-600 text-white hover:bg-blue-700": variant === "default",
+            "bg-gradient-to-r from-blue-600 to-indigo-700 text-white hover:shadow-lg hover:shadow-indigo-600/20": variant === "default",
             "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
-            "border border-gray-300 bg-white hover:bg-gray-100": variant === "outline",
-            "bg-gray-100 text-gray-900 hover:bg-gray-200": variant === "secondary",
-            "hover:bg-gray-100 hover:text-gray-900": variant === "ghost",
-            "text-blue-600 underline-offset-4 hover:underline": variant === "link",
+            "border border-indigo-400/30 bg-transparent text-white hover:bg-indigo-900/30": variant === "outline",
+            "bg-indigo-900/50 text-indigo-300 hover:bg-indigo-800/50": variant === "secondary",
+            "text-blue-200/80 hover:text-indigo-300 hover:bg-indigo-900/30": variant === "ghost",
+            "text-indigo-400 underline-offset-4 hover:underline": variant === "link",
           },
           {
             "h-10 py-2 px-4": size === "default",
@@ -46,14 +46,14 @@ export { Button }
 export const buttonVariants = (props?: Partial<ButtonProps>) => {
   const { variant = "default", size = "default" } = props || {}
   return cn(
-    "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
+    "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
     {
-      "bg-blue-600 text-white hover:bg-blue-700": variant === "default",
+      "bg-gradient-to-r from-blue-600 to-indigo-700 text-white hover:shadow-lg hover:shadow-indigo-600/20": variant === "default",
       "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
-      "border border-gray-300 bg-white hover:bg-gray-100": variant === "outline",
-      "bg-gray-100 text-gray-900 hover:bg-gray-200": variant === "secondary",
-      "hover:bg-gray-100 hover:text-gray-900": variant === "ghost",
-      "text-blue-600 underline-offset-4 hover:underline": variant === "link",
+      "border border-indigo-400/30 bg-transparent text-white hover:bg-indigo-900/30": variant === "outline",
+      "bg-indigo-900/50 text-indigo-300 hover:bg-indigo-800/50": variant === "secondary",
+      "text-blue-200/80 hover:text-indigo-300 hover:bg-indigo-900/30": variant === "ghost",
+      "text-indigo-400 underline-offset-4 hover:underline": variant === "link",
     },
     {
       "h-10 py-2 px-4": size === "default",

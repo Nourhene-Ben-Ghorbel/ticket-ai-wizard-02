@@ -33,15 +33,15 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-700">Nom d'utilisateur</FormLabel>
+              <FormLabel className="text-blue-100">Nom d'utilisateur</FormLabel>
               <FormControl>
                 <Input 
                   placeholder="Entrez votre nom d'utilisateur" 
                   {...field} 
-                  className="bg-white border-blue-200 rounded-lg focus:border-blue-400 focus:ring-blue-400"
+                  className="cosmic-input"
                 />
               </FormControl>
-              <FormMessage className="text-red-500" />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
@@ -51,16 +51,16 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-700">Email</FormLabel>
+              <FormLabel className="text-blue-100">Email</FormLabel>
               <FormControl>
                 <Input 
                   type="email" 
                   placeholder="votre.email@exemple.com" 
                   {...field} 
-                  className="bg-white border-blue-200 rounded-lg focus:border-blue-400 focus:ring-blue-400"
+                  className="cosmic-input"
                 />
               </FormControl>
-              <FormMessage className="text-red-500" />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
@@ -74,6 +74,8 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
               name="password" 
               label="Mot de passe" 
               {...field}
+              labelClass="text-blue-100"
+              inputClass="cosmic-input"
             />
           )}
         />
@@ -87,27 +89,32 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
               name="confirmPassword" 
               label="Confirmer le mot de passe" 
               {...field}
+              labelClass="text-blue-100"
+              inputClass="cosmic-input"
             />
           )}
         />
         
         <Button 
           type="submit" 
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md py-6" 
+          className="w-full cosmic-button py-6 relative overflow-hidden group" 
           disabled={isLoading}
         >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Chargement...
-            </>
-          ) : "S'inscrire"}
+          <span className="relative z-10">
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />
+                Chargement...
+              </>
+            ) : "S'inscrire"}
+          </span>
+          <span className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
         </Button>
         
         <div className="text-center text-sm">
-          <p>
+          <p className="text-blue-100/80">
             Déjà un compte ?{" "}
-            <Link to="/login" className="text-blue-600 hover:text-blue-700 hover:underline font-medium">
+            <Link to="/login" className="text-indigo-300 hover:text-indigo-200 hover:underline font-medium">
               Se connecter
             </Link>
           </p>
