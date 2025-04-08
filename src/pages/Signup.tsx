@@ -3,7 +3,6 @@ import { useAuth } from "../hooks/useAuth";
 import { AuthForm } from "../components/AuthForm";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { SignupFormValues } from "../lib/auth-schemas";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MessageCircle, Star } from "lucide-react";
 import StarfieldBackground from "@/components/StarfieldBackground";
@@ -20,7 +19,7 @@ const Signup = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = async (values: SignupFormValues) => {
+  const handleSubmit = async (values: { username: string; email: string; password: string }) => {
     await signup(values.username, values.email, values.password);
   };
 
@@ -62,7 +61,7 @@ const Signup = () => {
           </motion.div>
           
           <motion.h1 
-            className="text-3xl font-bold text-white mb-2 text-glow"
+            className="text-3xl font-bold text-gradient mb-2 font-raleway"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}

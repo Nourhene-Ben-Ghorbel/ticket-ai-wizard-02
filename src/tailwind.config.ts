@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -20,10 +19,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Montserrat', 'sans-serif'],
-				serif: ['Playfair Display', 'serif'],
-				montserrat: ['Montserrat', 'sans-serif'],
-				playfair: ['Playfair Display', 'serif'],
+				sans: ['Source Sans 3', 'sans-serif'],
+				raleway: ['Raleway', 'sans-serif'],
+				sourcesans: ['Source Sans 3', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -60,7 +58,7 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				cosmic: {
-					dark: '#050b24',
+					dark: '#0a1535',
 					DEFAULT: '#1e3a8a',
 					light: '#3b82f6',
 					accent: '#60a5fa'
@@ -146,7 +144,7 @@ export default {
 			},
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                'cosmic-gradient': 'linear-gradient(180deg, #050b24 0%, #040c30 100%)',
+                'cosmic-gradient': 'linear-gradient(180deg, #0a1535 0%, #081640 100%)',
 				'cosmic-card': 'linear-gradient(120deg, rgba(30,58,138,0.4) 0%, rgba(15,23,42,0.6) 100%)',
 				'button-gradient': 'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)',
             },

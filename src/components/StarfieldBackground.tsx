@@ -55,14 +55,14 @@ export const StarfieldBackground: React.FC = () => {
       }
     };
     
-    // Create a darker blue gradient background
+    // Create a slightly lighter blue gradient background
     const drawBackground = () => {
-      // Dark blue gradient as shown in the image
+      // Slightly lighter blue gradient
       const gradient = ctx.createLinearGradient(
         0, 0, 0, canvas.height
       );
-      gradient.addColorStop(0, '#050b24'); // Very dark blue at top
-      gradient.addColorStop(1, '#040c30');     // Still dark blue but slightly different
+      gradient.addColorStop(0, '#0a1535'); // Slightly lighter very dark blue at top
+      gradient.addColorStop(1, '#081640');  // Slightly lighter dark blue but still dark
       
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);

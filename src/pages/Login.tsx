@@ -24,7 +24,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-['Montserrat'] relative">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sourcesans relative">
       <StarfieldBackground />
       <CosmicElements />
       
@@ -61,7 +61,7 @@ const Login = () => {
           </motion.div>
           
           <motion.h1 
-            className="text-3xl font-bold text-white mb-2 text-glow"
+            className="text-3xl font-bold text-gradient mb-2 font-raleway"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}

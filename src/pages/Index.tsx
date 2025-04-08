@@ -32,7 +32,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen text-white font-['Montserrat'] relative overflow-hidden">
+    <div className="min-h-screen text-white font-sourcesans relative overflow-hidden">
       <StarfieldBackground />
       <CosmicElements />
       
@@ -56,7 +56,7 @@ const Index = () => {
           </motion.div>
           
           <motion.h1 
-            className="text-5xl md:text-7xl font-bold leading-tight mb-6 text-gradient"
+            className="text-5xl md:text-7xl font-bold leading-tight mb-6 text-gradient font-raleway"
             variants={itemVariants}
           >
             IA Ticket Wizard
