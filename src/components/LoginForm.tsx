@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { PasswordInput } from "./PasswordInput";
 import { loginSchema, LoginFormValues } from "../lib/auth-schemas";
+import { useTheme } from "@/hooks/useTheme";
 
 interface LoginFormProps {
   onSubmit: (values: LoginFormValues) => void;
@@ -19,6 +20,9 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
+  
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <Form {...form}>
@@ -28,16 +32,16 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="label-cosmic">Email</FormLabel>
+              <FormLabel className={isDark ? "label-cosmic" : "text-gray-700 font-medium"}>Email</FormLabel>
               <FormControl>
                 <Input 
                   type="email" 
                   placeholder="votre.email@exemple.com" 
                   {...field} 
-                  className="cosmic-input text-white"
+                  className="cosmic-input"
                 />
               </FormControl>
-              <FormMessage className="text-red-300" />
+              <FormMessage className={isDark ? "text-red-300" : "text-red-500"} />
             </FormItem>
           )}
         />
@@ -51,8 +55,8 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
               name="password" 
               label="Mot de passe" 
               {...field}
-              labelClass="label-cosmic"
-              inputClass="cosmic-input text-white"
+              labelClass={isDark ? "label-cosmic" : "text-gray-700 font-medium"}
+              inputClass="cosmic-input"
             />
           )}
         />
@@ -74,9 +78,9 @@ export const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
         </Button>
         
         <div className="text-center text-sm">
-          <p className="text-white">
+          <p className={isDark ? "text-white" : "text-gray-700"}>
             Pas encore de compte ?{" "}
-            <Link to="/signup" className="text-indigo-300 hover:text-indigo-200 hover:underline font-medium">
+            <Link to="/signup" className={isDark ? "text-indigo-300 hover:text-indigo-200 hover:underline font-medium" : "text-blue-600 hover:text-blue-800 hover:underline font-medium"}>
               Créer un compte
             </Link>
           </p>

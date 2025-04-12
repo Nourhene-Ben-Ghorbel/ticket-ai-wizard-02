@@ -9,10 +9,12 @@ import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/hooks/useTheme";
 
 const Signup = () => {
   const { signup, loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,7 +29,7 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative">
       <StarfieldBackground />
-      <CosmicElements />
+      {theme === "dark" && <CosmicElements />}
       
       {/* Theme toggle in top right corner */}
       <div className="fixed top-4 right-4 z-30">
@@ -45,7 +47,7 @@ const Signup = () => {
             variant="ghost" 
             size="sm"
             onClick={() => navigate("/")}
-            className="flex items-center gap-1 text-foreground hover:text-foreground hover:bg-white/5"
+            className={`flex items-center gap-1 ${theme === "light" ? "text-gray-700 hover:bg-gray-100" : "text-foreground hover:bg-white/5"}`}
           >
             <ArrowLeft size={16} />
             <span>Retour</span>
@@ -76,7 +78,7 @@ const Signup = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-blue-100 dark:text-blue-100 light:text-blue-600"
+            className={theme === "light" ? "text-gray-600" : "text-blue-100"}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
@@ -94,8 +96,12 @@ const Signup = () => {
         </motion.div>
       </motion.div>
       
-      <GlowingOrb className="top-1/4 right-1/4 -z-10" size={200} color="rgba(59, 130, 246, 0.15)" />
-      <GlowingOrb className="bottom-1/4 left-1/4 -z-10" size={150} color="rgba(59, 130, 246, 0.1)" />
+      {theme === "dark" && (
+        <>
+          <GlowingOrb className="top-1/4 right-1/4 -z-10" size={200} color="rgba(59, 130, 246, 0.15)" />
+          <GlowingOrb className="bottom-1/4 left-1/4 -z-10" size={150} color="rgba(59, 130, 246, 0.1)" />
+        </>
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -88,7 +87,7 @@
   }
 
   .light body {
-    background: #f1f5f9;
+    background: #ffffff;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -103,12 +102,16 @@
 }
 
 .light .cosmic-card {
-  @apply bg-white/70 border-gray-100 shadow-md;
+  @apply bg-white border-gray-200 shadow-md;
   box-shadow: 0 4px 20px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .cosmic-input {
   @apply bg-background/60 backdrop-blur-sm border border-white/20 text-foreground placeholder:text-white/40 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary/50;
+}
+
+.light .cosmic-input {
+  @apply bg-white border-gray-300 text-gray-800 placeholder:text-gray-400;
 }
 
 .cosmic-button {
@@ -125,7 +128,7 @@
 }
 
 .light .glass-card {
-  @apply bg-white/70 border-gray-100;
+  @apply bg-white border-gray-200;
 }
 
 .text-glow {
@@ -149,7 +152,7 @@
 }
 
 .light .cosmic-gradient {
-  @apply from-blue-400 via-blue-100 to-white;
+  @apply from-blue-500 via-indigo-400 to-purple-500;
 }
 
 .hover-scale {
@@ -216,7 +219,7 @@
 }
 
 .light .text-cosmic {
-  @apply text-blue-800;
+  @apply text-gray-800;
   text-shadow: none;
 }
 
@@ -225,7 +228,7 @@
 }
 
 .light .input-cosmic {
-  @apply bg-white border-gray-200 placeholder:text-gray-400;
+  @apply bg-white border-gray-300 text-gray-800 placeholder:text-gray-500;
 }
 
 .label-cosmic {
@@ -234,6 +237,7 @@
 }
 
 .light .label-cosmic {
+  @apply text-gray-700;
   text-shadow: none;
 }
 
@@ -280,5 +284,5 @@
 
 /* Light mode specific styles for the starfield background */
 .light .starfield-canvas {
-  opacity: 0.3;
+  opacity: 0.2;
 }

@@ -36,28 +36,28 @@ export const StarfieldBackground: React.FC = () => {
       ? ['#ffffff', '#d8e8ff', '#b3d1ff'] // Dark mode colors
       : ['#3b82f6', '#93c5fd', '#60a5fa']; // Light mode colors
     
-    // Initialize stars with a cleaner, darker appearance
+    // Initialize stars with a cleaner appearance
     const initStars = () => {
       stars.current = [];
       // Fewer stars for a cleaner look
-      const starCount = theme === 'dark' ? 150 : 100;
+      const starCount = theme === 'dark' ? 150 : 80;
       
       for (let i = 0; i < starCount; i++) {
         const starColor = starColors[Math.floor(Math.random() * starColors.length)];
-        const size = Math.random() * (theme === 'dark' ? 1.5 : 1) + 0.3; // Smaller stars in light mode
+        const size = Math.random() * (theme === 'dark' ? 1.5 : 0.8) + 0.3; // Smaller stars in light mode
         
         stars.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: size,
-          opacity: Math.random() * (theme === 'dark' ? 0.6 : 0.3) + (theme === 'dark' ? 0.2 : 0.1), // More subtle opacity in light mode
+          opacity: Math.random() * (theme === 'dark' ? 0.6 : 0.2) + (theme === 'dark' ? 0.2 : 0.1), // More subtle opacity in light mode
           color: starColor,
-          speed: Math.random() * 0.04 + 0.01 // Slower movement
+          speed: Math.random() * 0.03 + 0.01 // Slower movement
         });
       }
     };
     
-    // Create a slightly lighter blue gradient background
+    // Create a background
     const drawBackground = () => {
       if (theme === 'dark') {
         // Dark mode gradient
@@ -93,7 +93,7 @@ export const StarfieldBackground: React.FC = () => {
           ctx.fill();
         }
       } else {
-        // Light mode clouds
+        // Light mode clouds - extremely subtle
         for (let i = 0; i < 2; i++) {
           const x = Math.random() * canvas.width;
           const y = Math.random() * canvas.height;
@@ -101,7 +101,7 @@ export const StarfieldBackground: React.FC = () => {
           
           const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
           
-          gradient.addColorStop(0, 'rgba(147, 197, 253, 0.03)'); // Very subtle
+          gradient.addColorStop(0, 'rgba(147, 197, 253, 0.02)'); // Almost invisible
           gradient.addColorStop(1, 'rgba(147, 197, 253, 0)');
           
           ctx.fillStyle = gradient;
@@ -128,14 +128,14 @@ export const StarfieldBackground: React.FC = () => {
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         
         ctx.fillStyle = `${star.color}${Math.floor(star.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.shadowBlur = star.size * (theme === 'dark' ? 1.2 : 0.8);
+        ctx.shadowBlur = star.size * (theme === 'dark' ? 1.2 : 0.5);
         ctx.shadowColor = star.color;
         ctx.fill();
         ctx.shadowBlur = 0;
         
         // Occasional subtle twinkle
         if (Math.random() > 0.995) {
-          star.opacity = Math.min(theme === 'dark' ? 0.8 : 0.4, star.opacity + (theme === 'dark' ? 0.2 : 0.1));
+          star.opacity = Math.min(theme === 'dark' ? 0.8 : 0.3, star.opacity + (theme === 'dark' ? 0.2 : 0.1));
           setTimeout(() => {
             star.opacity = Math.max(theme === 'dark' ? 0.2 : 0.1, star.opacity - (theme === 'dark' ? 0.2 : 0.1));
           }, 100);
@@ -169,7 +169,7 @@ export const StarfieldBackground: React.FC = () => {
   return (
     <canvas 
       ref={canvasRef} 
-      className={`fixed top-0 left-0 w-full h-full pointer-events-none z-0 starfield-canvas ${theme === 'light' ? 'opacity-30' : 'opacity-100'}`}
+      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 starfield-canvas"
     />
   );
 };

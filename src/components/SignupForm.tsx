@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { PasswordInput } from "./PasswordInput";
 import { signupSchema, SignupFormValues } from "../lib/auth-schemas";
+import { useTheme } from "@/hooks/useTheme";
 
 interface SignupFormProps {
   onSubmit: (values: SignupFormValues) => void;
@@ -24,6 +25,9 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
       confirmPassword: "" 
     },
   });
+  
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <Form {...form}>
@@ -33,15 +37,15 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="label-cosmic">Nom d'utilisateur</FormLabel>
+              <FormLabel className={isDark ? "label-cosmic" : "text-gray-700 font-medium"}>Nom d'utilisateur</FormLabel>
               <FormControl>
                 <Input 
                   placeholder="Entrez votre nom d'utilisateur" 
                   {...field} 
-                  className="cosmic-input text-white"
+                  className="cosmic-input"
                 />
               </FormControl>
-              <FormMessage className="text-red-300" />
+              <FormMessage className={isDark ? "text-red-300" : "text-red-500"} />
             </FormItem>
           )}
         />
@@ -51,16 +55,16 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="label-cosmic">Email</FormLabel>
+              <FormLabel className={isDark ? "label-cosmic" : "text-gray-700 font-medium"}>Email</FormLabel>
               <FormControl>
                 <Input 
                   type="email" 
                   placeholder="votre.email@exemple.com" 
                   {...field} 
-                  className="cosmic-input text-white"
+                  className="cosmic-input"
                 />
               </FormControl>
-              <FormMessage className="text-red-300" />
+              <FormMessage className={isDark ? "text-red-300" : "text-red-500"} />
             </FormItem>
           )}
         />
@@ -74,8 +78,8 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
               name="password" 
               label="Mot de passe" 
               {...field}
-              labelClass="label-cosmic"
-              inputClass="cosmic-input text-white"
+              labelClass={isDark ? "label-cosmic" : "text-gray-700 font-medium"}
+              inputClass="cosmic-input"
             />
           )}
         />
@@ -89,8 +93,8 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
               name="confirmPassword" 
               label="Confirmer le mot de passe" 
               {...field}
-              labelClass="label-cosmic"
-              inputClass="cosmic-input text-white"
+              labelClass={isDark ? "label-cosmic" : "text-gray-700 font-medium"}
+              inputClass="cosmic-input"
             />
           )}
         />
@@ -112,9 +116,9 @@ export const SignupForm = ({ onSubmit, isLoading }: SignupFormProps) => {
         </Button>
         
         <div className="text-center text-sm">
-          <p className="text-white">
+          <p className={isDark ? "text-white" : "text-gray-700"}>
             Déjà un compte ?{" "}
-            <Link to="/login" className="text-indigo-300 hover:text-indigo-200 hover:underline font-medium">
+            <Link to="/login" className={isDark ? "text-indigo-300 hover:text-indigo-200 hover:underline font-medium" : "text-blue-600 hover:text-blue-800 hover:underline font-medium"}>
               Se connecter
             </Link>
           </p>
