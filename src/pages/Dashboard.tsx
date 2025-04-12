@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { TicketUpload } from "@/components/TicketUpload";
 import { ChatInterface } from "@/components/ChatInterface";
-import { MessageCircle, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
@@ -52,31 +52,18 @@ const Dashboard = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.div className="text-center mb-8" variants={itemVariants}>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">
-              <span className="text-gradient">Traitement des tickets</span>
-            </h1>
-            <p className={cn(
-              "max-w-lg mx-auto",
-              isDark ? "text-blue-200/80" : "text-blue-700"
-            )}>
-              Explorez l'univers de vos tickets avec notre IA avancée. Importez votre fichier pour obtenir des réponses instantanées.
-            </p>
-          </motion.div>
-          
-          <motion.div 
-            className="cosmic-card mb-6"
-            variants={itemVariants}
-          >
-            <div className="p-6">
-              <h2 className={cn(
-                "text-xl font-medium mb-4 flex items-center",
-                isDark ? "text-white" : "text-gray-800"
-              )}>
-                <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-600")} size={20} />
-                Importez votre fichier de tickets
-              </h2>
-              <TicketUpload onFileUploaded={handleFileUploaded} />
+          <motion.div variants={itemVariants}>
+            <div className="cosmic-card mb-6">
+              <div className="p-6">
+                <h2 className={cn(
+                  "text-xl font-medium mb-4 flex items-center",
+                  isDark ? "text-white" : "text-gray-800"
+                )}>
+                  <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-600")} size={20} />
+                  Importez votre fichier de tickets
+                </h2>
+                <TicketUpload onFileUploaded={handleFileUploaded} />
+              </div>
             </div>
           </motion.div>
           

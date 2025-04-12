@@ -11,7 +11,7 @@ import { useTheme } from "@/hooks/useTheme";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin, user } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
@@ -68,7 +68,7 @@ const Index = () => {
             className="text-5xl md:text-7xl font-bold leading-tight mb-6 text-gradient font-raleway"
             variants={itemVariants}
           >
-            IA Ticket Wizard
+            MegSupport
           </motion.h1>
           
           <motion.p 
@@ -108,13 +108,27 @@ const Index = () => {
                 </Button>
               </>
             ) : (
-              <Button 
-                className="text-lg px-8 py-7 cosmic-button group relative overflow-hidden"
-                onClick={() => navigate(isAdmin ? "/admin" : "/dashboard")}
-              >
-                <span className="relative z-10">Accéder à la partie de traitement des tickets</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-              </Button>
+              <>
+                <Button 
+                  className="text-lg px-8 py-7 cosmic-button group relative overflow-hidden"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  <span className="relative z-10">Accéder à la partie de traitement des tickets</span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                </Button>
+                
+                {isAdmin && (
+                  <Button 
+                    variant="outline" 
+                    className={`text-lg px-8 py-7 border rounded-lg transition-all duration-300 backdrop-blur-sm relative ${isDark ? 'border-white/20 text-white hover:bg-white/5' : 'border-blue-200 text-blue-700 hover:bg-blue-50'}`}
+                    onClick={() => navigate("/admin")}
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      <span>Accéder au dashboard</span>
+                    </span>
+                  </Button>
+                )}
+              </>
             )}
           </motion.div>
           
@@ -122,7 +136,7 @@ const Index = () => {
             className={`mt-16 text-sm ${isDark ? 'text-blue-200/70' : 'text-blue-700/70'}`}
             variants={itemVariants}
           >
-            <p>© 2025 IA Ticket Wizard. Tous droits réservés.</p>
+            <p>© 2025 MegSupport. Tous droits réservés.</p>
           </motion.div>
         </motion.div>
 

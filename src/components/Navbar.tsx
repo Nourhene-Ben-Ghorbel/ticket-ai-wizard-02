@@ -104,7 +104,7 @@ export const Navbar = () => {
                 )}
                 <Star className="absolute -top-1 -right-1 text-yellow-300 animate-twinkle" size={12} />
               </div>
-              <span className="text-xl font-bold text-gradient">Ticket AI Wizard</span>
+              <span className="text-xl font-bold text-gradient">MegSupport</span>
             </Link>
           </motion.div>
 
@@ -124,12 +124,6 @@ export const Navbar = () => {
                 <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<MessageCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
                   Traitement des tickets
                 </NavLink>
-                
-                {isAdmin && (
-                  <NavLink href="/admin/statistics" icon={<BarChart3 size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
-                    Statistiques
-                  </NavLink>
-                )}
                 
                 <div 
                   ref={userDropdownRef} 
@@ -236,12 +230,6 @@ export const Navbar = () => {
                 <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<MessageCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
                   Traitement des tickets
                 </NavLink>
-                
-                {isAdmin && (
-                  <NavLink href="/admin/statistics" icon={<BarChart3 size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
-                    Statistiques
-                  </NavLink>
-                )}
                 
                 <div className={cn(
                   "flex items-center gap-2 px-3 py-1.5 rounded-full w-fit",

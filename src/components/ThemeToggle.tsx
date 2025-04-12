@@ -2,7 +2,6 @@
 import { Moon, Sun } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/hooks/useTheme";
-import { motion } from "framer-motion";
 
 export const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
