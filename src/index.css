@@ -7,6 +7,37 @@
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 221 83% 53%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+    --radius: 1rem;
+  }
+
+  .dark {
     --background: 222 65% 8%;
     --foreground: 210 40% 98%;
 
@@ -34,7 +65,6 @@
     --border: 222 47% 20%;
     --input: 222 47% 20%;
     --ring: 221 83% 53%;
-    --radius: 1rem;
   }
 }
 
@@ -50,8 +80,15 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    background: #0a1535;
     min-height: 100vh;
+  }
+
+  .dark body {
+    background: #0a1535;
+  }
+
+  .light body {
+    background: #f1f5f9;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -65,8 +102,13 @@
   box-shadow: 0 4px 30px rgba(37, 99, 235, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
+.light .cosmic-card {
+  @apply bg-white/70 border-gray-100 shadow-md;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
 .cosmic-input {
-  @apply bg-background/60 backdrop-blur-sm border border-white/20 text-white placeholder:text-white/40 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary/50;
+  @apply bg-background/60 backdrop-blur-sm border border-white/20 text-foreground placeholder:text-white/40 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary/50;
 }
 
 .cosmic-button {
@@ -74,20 +116,40 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+.light .cosmic-button {
+  @apply shadow-blue-400/10 hover:shadow-blue-500/20;
+}
+
 .glass-card {
   @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl shadow-lg;
+}
+
+.light .glass-card {
+  @apply bg-white/70 border-gray-100;
 }
 
 .text-glow {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
+.light .text-glow {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
 .text-gradient {
   @apply bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent;
 }
 
+.light .text-gradient {
+  @apply from-blue-600 via-indigo-500 to-purple-600;
+}
+
 .cosmic-gradient {
   @apply bg-gradient-to-br from-blue-900 via-slate-900 to-slate-900;
+}
+
+.light .cosmic-gradient {
+  @apply from-blue-400 via-blue-100 to-white;
 }
 
 .hover-scale {
@@ -145,17 +207,29 @@
 
 /* Improved text styling for better readability */
 .text-cosmic {
-  @apply text-white;
+  @apply text-white dark:text-white light:text-blue-800;
   text-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
 }
 
+.light .text-cosmic {
+  text-shadow: none;
+}
+
 .input-cosmic {
-  @apply bg-white/10 border-white/20 text-white placeholder:text-white/40;
+  @apply bg-white/10 border-white/20 text-foreground placeholder:text-white/40;
+}
+
+.light .input-cosmic {
+  @apply bg-white border-gray-200 placeholder:text-gray-400;
 }
 
 .label-cosmic {
-  @apply text-white font-medium;
+  @apply text-foreground font-medium;
   text-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+}
+
+.light .label-cosmic {
+  text-shadow: none;
 }
 
 /* Animation for cosmic elements */
@@ -179,6 +253,27 @@
   @apply bg-gradient-to-br from-blue-600/20 to-blue-800/30 border border-blue-400/10 backdrop-blur-sm;
 }
 
+.light .ai-chat-bubble {
+  @apply from-blue-100 to-blue-50 border-blue-200/40;
+}
+
 .user-chat-bubble {
   @apply bg-gradient-to-br from-gray-800/40 to-slate-900/40 border border-white/10 backdrop-blur-sm;
+}
+
+.light .user-chat-bubble {
+  @apply from-gray-100 to-slate-50 border-gray-200/40;
+}
+
+.shadow-neon {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.light .shadow-neon {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+/* Light mode specific styles for the starfield background */
+.light .starfield-canvas {
+  opacity: 0.3;
 }

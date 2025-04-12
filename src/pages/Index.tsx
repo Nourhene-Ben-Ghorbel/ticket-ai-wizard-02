@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -32,9 +33,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen text-white font-sourcesans relative overflow-hidden">
+    <div className="min-h-screen text-foreground font-sourcesans relative overflow-hidden">
       <StarfieldBackground />
       <CosmicElements />
+      
+      {/* Theme toggle in top right corner */}
+      <div className="fixed top-4 right-4 z-30">
+        <ThemeToggle />
+      </div>
       
       {/* Hero Section */}
       <div className="relative min-h-screen flex items-center justify-center px-4">
@@ -63,7 +69,7 @@ const Index = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-lg text-blue-100 mb-10 max-w-xl mx-auto"
+            className="text-lg text-blue-100 dark:text-blue-100 light:text-blue-800 mb-10 max-w-xl mx-auto"
             variants={itemVariants}
           >
             Explorez l'univers des tickets avec notre intelligence artificielle avancée
@@ -88,11 +94,11 @@ const Index = () => {
                 
                 <Button 
                   variant="outline" 
-                  className="text-lg px-8 py-7 border border-white/20 text-white hover:bg-white/5 rounded-lg transition-all duration-300 backdrop-blur-sm relative"
+                  className="text-lg px-8 py-7 border border-white/20 dark:text-white light:text-blue-600 hover:bg-white/5 rounded-lg transition-all duration-300 backdrop-blur-sm relative"
                   onClick={() => navigate("/signup")}
                 >
                   <span className="relative z-10 flex items-center gap-2">
-                    <UserPlus size={18} className="text-white" />
+                    <UserPlus size={18} />
                     <span>Créer un compte</span>
                   </span>
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
@@ -110,7 +116,7 @@ const Index = () => {
           </motion.div>
           
           <motion.div 
-            className="mt-16 text-sm text-blue-200/70"
+            className="mt-16 text-sm text-blue-200/70 dark:text-blue-200/70 light:text-blue-500/70"
             variants={itemVariants}
           >
             <p>© 2025 IA Ticket Wizard. Tous droits réservés.</p>

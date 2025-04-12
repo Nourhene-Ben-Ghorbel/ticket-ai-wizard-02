@@ -8,6 +8,7 @@ import { ArrowLeft, MessageCircle, Star } from "lucide-react";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Login = () => {
   const { login, loading, isAuthenticated, isAdmin } = useAuth();
@@ -28,6 +29,11 @@ const Login = () => {
       <StarfieldBackground />
       <CosmicElements />
       
+      {/* Theme toggle in top right corner */}
+      <div className="fixed top-4 right-4 z-30">
+        <ThemeToggle />
+      </div>
+      
       <motion.div 
         className="w-full max-w-md cosmic-card p-8 relative z-10"
         initial={{ opacity: 0, y: 20 }}
@@ -39,7 +45,7 @@ const Login = () => {
             variant="ghost" 
             size="sm"
             onClick={() => navigate("/")}
-            className="flex items-center gap-1 text-white hover:text-white hover:bg-white/5"
+            className="flex items-center gap-1 text-foreground hover:text-foreground hover:bg-white/5"
           >
             <ArrowLeft size={16} />
             <span>Retour</span>
@@ -70,7 +76,7 @@ const Login = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-blue-100"
+            className="text-blue-100 dark:text-blue-100 light:text-blue-600"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}

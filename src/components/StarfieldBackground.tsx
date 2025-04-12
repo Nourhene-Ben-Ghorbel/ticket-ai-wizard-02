@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 
 interface Star {
   x: number;
@@ -14,6 +15,7 @@ export const StarfieldBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stars = useRef<Star[]>([]);
   const animationFrameId = useRef<number>();
+  const { theme } = useTheme();
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,25 +32,25 @@ export const StarfieldBackground: React.FC = () => {
     };
     
     // More subtle star colors focused on blue/white
-    const starColors = [
-      '#ffffff', // White
-      '#d8e8ff', // Soft light blue
-      '#b3d1ff', // Light blue
-    ];
+    const starColors = theme === 'dark' 
+      ? ['#ffffff', '#d8e8ff', '#b3d1ff'] // Dark mode colors
+      : ['#3b82f6', '#93c5fd', '#60a5fa']; // Light mode colors
     
     // Initialize stars with a cleaner, darker appearance
     const initStars = () => {
       stars.current = [];
       // Fewer stars for a cleaner look
-      for (let i = 0; i < 150; i++) {
+      const starCount = theme === 'dark' ? 150 : 100;
+      
+      for (let i = 0; i < starCount; i++) {
         const starColor = starColors[Math.floor(Math.random() * starColors.length)];
-        const size = Math.random() * 1.5 + 0.3; // Smaller stars
+        const size = Math.random() * (theme === 'dark' ? 1.5 : 1) + 0.3; // Smaller stars in light mode
         
         stars.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: size,
-          opacity: Math.random() * 0.6 + 0.2, // More subtle opacity
+          opacity: Math.random() * (theme === 'dark' ? 0.6 : 0.3) + (theme === 'dark' ? 0.2 : 0.1), // More subtle opacity in light mode
           color: starColor,
           speed: Math.random() * 0.04 + 0.01 // Slower movement
         });
@@ -57,34 +59,56 @@ export const StarfieldBackground: React.FC = () => {
     
     // Create a slightly lighter blue gradient background
     const drawBackground = () => {
-      // Slightly lighter blue gradient
-      const gradient = ctx.createLinearGradient(
-        0, 0, 0, canvas.height
-      );
-      gradient.addColorStop(0, '#0a1535'); // Slightly lighter very dark blue at top
-      gradient.addColorStop(1, '#081640');  // Slightly lighter dark blue but still dark
-      
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (theme === 'dark') {
+        // Dark mode gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#0a1535'); // Very dark blue at top
+        gradient.addColorStop(1, '#081640');  // Dark blue
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else {
+        // Light mode: transparent background (let CSS handle it)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
     };
     
     // Add subtle cosmic clouds (very faint)
     const drawClouds = () => {
-      for (let i = 0; i < 2; i++) { // Fewer clouds
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const radius = Math.random() * 120 + 50;
-        
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        
-        // Dark blue cloud color, very subtle
-        gradient.addColorStop(0, 'rgba(20, 40, 100, 0.03)'); // Much more subtle
-        gradient.addColorStop(1, 'rgba(10, 20, 60, 0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fill();
+      if (theme === 'dark') {
+        for (let i = 0; i < 2; i++) { // Fewer clouds
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          const radius = Math.random() * 120 + 50;
+          
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+          
+          // Dark blue cloud color, very subtle
+          gradient.addColorStop(0, 'rgba(20, 40, 100, 0.03)'); // Much more subtle
+          gradient.addColorStop(1, 'rgba(10, 20, 60, 0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        // Light mode clouds
+        for (let i = 0; i < 2; i++) {
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          const radius = Math.random() * 120 + 50;
+          
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+          
+          gradient.addColorStop(0, 'rgba(147, 197, 253, 0.03)'); // Very subtle
+          gradient.addColorStop(1, 'rgba(147, 197, 253, 0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
     };
     
@@ -104,16 +128,16 @@ export const StarfieldBackground: React.FC = () => {
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         
         ctx.fillStyle = `${star.color}${Math.floor(star.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.shadowBlur = star.size * 1.2;
+        ctx.shadowBlur = star.size * (theme === 'dark' ? 1.2 : 0.8);
         ctx.shadowColor = star.color;
         ctx.fill();
         ctx.shadowBlur = 0;
         
         // Occasional subtle twinkle
         if (Math.random() > 0.995) {
-          star.opacity = Math.min(0.8, star.opacity + 0.2);
+          star.opacity = Math.min(theme === 'dark' ? 0.8 : 0.4, star.opacity + (theme === 'dark' ? 0.2 : 0.1));
           setTimeout(() => {
-            star.opacity = Math.max(0.2, star.opacity - 0.2);
+            star.opacity = Math.max(theme === 'dark' ? 0.2 : 0.1, star.opacity - (theme === 'dark' ? 0.2 : 0.1));
           }, 100);
         }
         
@@ -140,12 +164,12 @@ export const StarfieldBackground: React.FC = () => {
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, []);
+  }, [theme]);
   
   return (
     <canvas 
       ref={canvasRef} 
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
+      className={`fixed top-0 left-0 w-full h-full pointer-events-none z-0 starfield-canvas ${theme === 'light' ? 'opacity-30' : 'opacity-100'}`}
     />
   );
 };
