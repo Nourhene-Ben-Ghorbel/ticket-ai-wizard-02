@@ -28,14 +28,16 @@ export const PasswordInput = ({ control, name, label, labelClass, inputClass, ..
         <FormControl>
           <Input
             type={showPassword ? "text" : "password"}
-            className={`pr-10 ${inputClass || (isDark ? "bg-white/10 border-white/20" : "bg-white border-gray-200")}`}
+            className={`pr-10 ${inputClass || ""}`}
             {...props}
           />
         </FormControl>
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className={isDark ? "absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white" : "absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"}
+          className={isDark 
+            ? "absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white" 
+            : "absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"}
           tabIndex={-1}
         >
           {showPassword ? (

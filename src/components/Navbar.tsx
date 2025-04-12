@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ import {
   MessageCircle,
   UserCircle,
   Star,
+  ChevronDown,
+  Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -23,8 +25,10 @@ export const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +37,18 @@ export const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const NavLink = ({ href, children, icon }: { href: string, children: React.ReactNode, icon: React.ReactNode }) => {
@@ -49,7 +65,7 @@ export const Navbar = () => {
               : "bg-blue-100 text-blue-700 border border-blue-200"
             : isDark
               ? "hover:bg-indigo-900/30 text-blue-200/80 hover:text-indigo-300" 
-              : "hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+              : "hover:bg-blue-50 text-gray-700 hover:text-blue-700"
         )}
         onClick={() => setIsOpen(false)}
       >
@@ -80,7 +96,7 @@ export const Navbar = () => {
             <Link to="/" className="flex items-center space-x-2">
               <div className={cn(
                 "w-10 h-10 rounded-full flex items-center justify-center relative",
-                isDark ? "bg-indigo-600 shadow-neon" : "bg-blue-500 shadow-md"
+                isDark ? "bg-indigo-600 shadow-neon" : "bg-blue-600 shadow-md"
               )}>
                 <MessageCircle size={20} className="text-white" />
                 {isDark && (
@@ -101,8 +117,12 @@ export const Navbar = () => {
           >
             {isAuthenticated && (
               <>
-                <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<Home size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
-                  {isAdmin ? "Tableau de bord" : "Accueil"}
+                <NavLink href="/" icon={<Home size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                  Accueil
+                </NavLink>
+                
+                <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<MessageCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                  Traitement des tickets
                 </NavLink>
                 
                 {isAdmin && (
@@ -111,29 +131,51 @@ export const Navbar = () => {
                   </NavLink>
                 )}
                 
-                <div className={cn(
-                  "flex items-center px-3 py-1.5 rounded-full space-x-2",
-                  isDark 
-                    ? "bg-indigo-900/50 text-indigo-300 border border-indigo-700/50" 
-                    : "bg-blue-100 text-blue-700 border border-blue-200"
-                )}>
-                  <UserCircle size={18} />
-                  <span>{user?.username || "Utilisateur"}</span>
+                <div 
+                  ref={userDropdownRef} 
+                  className="relative"
+                >
+                  <button
+                    className={cn(
+                      "flex items-center px-3 py-1.5 rounded-full space-x-2",
+                      isDark 
+                        ? "bg-indigo-900/50 text-indigo-300 border border-indigo-700/50 hover:bg-indigo-900/70" 
+                        : "bg-blue-100 text-blue-700 border border-blue-200 hover:bg-blue-200"
+                    )}
+                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  >
+                    <UserCircle size={18} />
+                    <span className="max-w-[150px] truncate">{user?.username || "Utilisateur"}</span>
+                    <ChevronDown size={14} className={`transition-transform ${showUserDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {showUserDropdown && (
+                    <div 
+                      className={cn(
+                        "absolute right-0 mt-2 w-48 cosmic-card p-2 z-50",
+                        isDark ? "bg-background/90" : "bg-white"
+                      )}
+                    >
+                      <div className="py-1">
+                        <button 
+                          className={cn(
+                            "flex items-center w-full text-left px-4 py-2 rounded-lg gap-2",
+                            isDark ? "hover:bg-indigo-900/30 text-blue-200/80" : "hover:bg-blue-50 text-gray-700"
+                          )}
+                          onClick={logout}
+                        >
+                          <LogOut size={16} />
+                          <span>Déconnexion</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 
-                <Button 
-                  variant="ghost" 
-                  className={cn(
-                    "flex items-center gap-2",
-                    isDark 
-                      ? "text-blue-200/80 hover:text-indigo-300 hover:bg-indigo-900/30" 
-                      : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
-                  )}
-                  onClick={logout}
-                >
-                  <LogOut size={18} />
-                  <span>Déconnexion</span>
-                </Button>
+                {/* Theme toggle for desktop */}
+                <div className="flex items-center">
+                  <ThemeToggle />
+                </div>
               </>
             )}
             
@@ -144,7 +186,7 @@ export const Navbar = () => {
                   className={cn(
                     isDark 
                       ? "text-blue-200/80 hover:text-indigo-300 hover:bg-indigo-900/30" 
-                      : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
+                      : "text-gray-700 hover:text-blue-700 hover:bg-blue-50"
                   )}
                 >
                   <Link to="/login">Se connecter</Link>
@@ -152,13 +194,11 @@ export const Navbar = () => {
                 <Button className="cosmic-button">
                   <Link to="/signup">S'inscrire</Link>
                 </Button>
+                <div className="ml-2">
+                  <ThemeToggle />
+                </div>
               </div>
             )}
-
-            {/* Theme toggle for desktop */}
-            <div className="flex items-center">
-              <ThemeToggle />
-            </div>
           </motion.nav>
           
           {/* Mobile menu button */}
@@ -170,7 +210,7 @@ export const Navbar = () => {
               variant="ghost" 
               size="icon" 
               onClick={() => setIsOpen(!isOpen)}
-              className={isDark ? "text-indigo-300 hover:bg-indigo-900/30" : "text-blue-600 hover:bg-blue-50"}
+              className={isDark ? "text-indigo-300 hover:bg-indigo-900/30" : "text-blue-700 hover:bg-blue-50"}
             >
               {isOpen ? <X /> : <Menu />}
             </Button>
@@ -189,8 +229,12 @@ export const Navbar = () => {
           <nav className="flex flex-col space-y-3">
             {isAuthenticated && (
               <>
-                <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<Home size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
-                  {isAdmin ? "Tableau de bord" : "Accueil"}
+                <NavLink href="/" icon={<Home size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                  Accueil
+                </NavLink>
+
+                <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<MessageCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                  Traitement des tickets
                 </NavLink>
                 
                 {isAdmin && (
@@ -206,7 +250,7 @@ export const Navbar = () => {
                     : "bg-blue-100 text-blue-700 border border-blue-200"
                 )}>
                   <UserCircle size={18} />
-                  <span>{user?.username || "Utilisateur"}</span>
+                  <span className="truncate max-w-[150px]">{user?.username || "Utilisateur"}</span>
                 </div>
                 
                 <Button 
@@ -215,7 +259,7 @@ export const Navbar = () => {
                     "flex items-center justify-start gap-2",
                     isDark 
                       ? "text-blue-200/80 hover:text-indigo-300 hover:bg-indigo-900/30"
-                      : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
+                      : "text-gray-700 hover:text-blue-700 hover:bg-blue-50"
                   )}
                   onClick={() => {
                     logout();
@@ -236,7 +280,7 @@ export const Navbar = () => {
                     "w-full justify-start",
                     isDark
                       ? "text-blue-200/80 hover:text-indigo-300"
-                      : "text-gray-600 hover:text-blue-700"
+                      : "text-gray-700 hover:text-blue-700"
                   )}
                 >
                   <Link to="/login">Se connecter</Link>

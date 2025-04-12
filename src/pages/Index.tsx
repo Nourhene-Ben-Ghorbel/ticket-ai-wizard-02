@@ -7,10 +7,13 @@ import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/hooks/useTheme";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isAdmin } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -34,8 +37,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen text-foreground font-sourcesans relative overflow-hidden">
-      <StarfieldBackground />
-      <CosmicElements />
+      {isDark && <StarfieldBackground />}
+      {isDark && <CosmicElements />}
       
       {/* Theme toggle in top right corner */}
       <div className="fixed top-4 right-4 z-30">
@@ -54,9 +57,9 @@ const Index = () => {
             className="mb-8 flex justify-center"
             variants={itemVariants}
           >
-            <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center shadow-neon relative animate-pulse-slow">
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center relative animate-pulse-slow ${isDark ? 'bg-blue-500 shadow-neon' : 'bg-blue-600 shadow-lg'}`}>
               <MessageCircle size={40} className="text-white" />
-              <div className="absolute inset-0 rounded-full bg-blue-500 blur-md opacity-50"></div>
+              {isDark && <div className="absolute inset-0 rounded-full bg-blue-500 blur-md opacity-50"></div>}
               <Star className="absolute -top-1 -right-1 text-yellow-300 animate-twinkle" size={16} />
             </div>
           </motion.div>
@@ -69,7 +72,7 @@ const Index = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-lg text-blue-100 dark:text-blue-100 light:text-blue-800 mb-10 max-w-xl mx-auto"
+            className={`text-lg mb-10 max-w-xl mx-auto ${isDark ? 'text-blue-100' : 'text-blue-900'}`}
             variants={itemVariants}
           >
             Explorez l'univers des tickets avec notre intelligence artificielle avancée
@@ -94,14 +97,14 @@ const Index = () => {
                 
                 <Button 
                   variant="outline" 
-                  className="text-lg px-8 py-7 border border-white/20 dark:text-white light:text-blue-600 hover:bg-white/5 rounded-lg transition-all duration-300 backdrop-blur-sm relative"
+                  className={`text-lg px-8 py-7 border rounded-lg transition-all duration-300 backdrop-blur-sm relative ${isDark ? 'border-white/20 text-white hover:bg-white/5' : 'border-blue-200 text-blue-700 hover:bg-blue-50'}`}
                   onClick={() => navigate("/signup")}
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <UserPlus size={18} />
                     <span>Créer un compte</span>
                   </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className={`absolute inset-0 bg-gradient-to-r opacity-0 hover:opacity-100 transition-opacity duration-300 ${isDark ? 'from-blue-500/5 to-blue-600/5' : 'from-blue-100 to-blue-200'}`}></span>
                 </Button>
               </>
             ) : (
@@ -109,22 +112,26 @@ const Index = () => {
                 className="text-lg px-8 py-7 cosmic-button group relative overflow-hidden"
                 onClick={() => navigate(isAdmin ? "/admin" : "/dashboard")}
               >
-                <span className="relative z-10">Accéder à mon tableau de bord</span>
+                <span className="relative z-10">Accéder à la partie de traitement des tickets</span>
                 <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
               </Button>
             )}
           </motion.div>
           
           <motion.div 
-            className="mt-16 text-sm text-blue-200/70 dark:text-blue-200/70 light:text-blue-500/70"
+            className={`mt-16 text-sm ${isDark ? 'text-blue-200/70' : 'text-blue-700/70'}`}
             variants={itemVariants}
           >
             <p>© 2025 IA Ticket Wizard. Tous droits réservés.</p>
           </motion.div>
         </motion.div>
 
-        <GlowingOrb className="top-1/3 left-1/4 -z-10" size={200} color="rgba(59, 130, 246, 0.2)" />
-        <GlowingOrb className="bottom-1/4 right-1/4 -z-10" size={200} color="rgba(96, 165, 250, 0.15)" />
+        {isDark && (
+          <>
+            <GlowingOrb className="top-1/3 left-1/4 -z-10" size={200} color="rgba(59, 130, 246, 0.2)" />
+            <GlowingOrb className="bottom-1/4 right-1/4 -z-10" size={200} color="rgba(96, 165, 250, 0.15)" />
+          </>
+        )}
       </div>
     </div>
   );

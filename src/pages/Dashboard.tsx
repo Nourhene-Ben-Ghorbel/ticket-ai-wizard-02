@@ -54,7 +54,7 @@ const Dashboard = () => {
         >
           <motion.div className="text-center mb-8" variants={itemVariants}>
             <h1 className="text-3xl md:text-4xl font-bold mb-2">
-              <span className="text-gradient">Ticket AI Wizard</span>
+              <span className="text-gradient">Traitement des tickets</span>
             </h1>
             <p className={cn(
               "max-w-lg mx-auto",
@@ -73,7 +73,7 @@ const Dashboard = () => {
                 "text-xl font-medium mb-4 flex items-center",
                 isDark ? "text-white" : "text-gray-800"
               )}>
-                <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-500")} size={20} />
+                <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-600")} size={20} />
                 Importez votre fichier de tickets
               </h2>
               <TicketUpload onFileUploaded={handleFileUploaded} />
