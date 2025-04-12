@@ -207,11 +207,16 @@
 
 /* Improved text styling for better readability */
 .text-cosmic {
-  @apply text-white dark:text-white light:text-blue-800;
+  @apply text-white;
   text-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
 }
 
+.dark .text-cosmic {
+  @apply text-white;
+}
+
 .light .text-cosmic {
+  @apply text-blue-800;
   text-shadow: none;
 }
 
