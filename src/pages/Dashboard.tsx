@@ -7,9 +7,13 @@ import { MessageCircle, Upload } from "lucide-react";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const [initialMessage, setInitialMessage] = useState<string | undefined>();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   
   const handleFileUploaded = (message: string) => {
     setInitialMessage(message);
@@ -36,9 +40,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen text-white relative overflow-x-hidden font-['Space_Grotesk']">
-      <StarfieldBackground />
-      <CosmicElements />
+    <div className="min-h-screen relative overflow-x-hidden font-sourcesans text-foreground">
+      {isDark && <StarfieldBackground />}
+      {isDark && <CosmicElements />}
       <Navbar />
       
       <main className="container mx-auto pt-24 px-4 relative z-10">
@@ -52,7 +56,10 @@ const Dashboard = () => {
             <h1 className="text-3xl md:text-4xl font-bold mb-2">
               <span className="text-gradient">Ticket AI Wizard</span>
             </h1>
-            <p className="text-blue-200/80 max-w-lg mx-auto">
+            <p className={cn(
+              "max-w-lg mx-auto",
+              isDark ? "text-blue-200/80" : "text-blue-700"
+            )}>
               Explorez l'univers de vos tickets avec notre IA avancée. Importez votre fichier pour obtenir des réponses instantanées.
             </p>
           </motion.div>
@@ -62,8 +69,11 @@ const Dashboard = () => {
             variants={itemVariants}
           >
             <div className="p-6">
-              <h2 className="text-xl font-medium mb-4 text-white flex items-center">
-                <Upload className="mr-2 text-indigo-400" size={20} />
+              <h2 className={cn(
+                "text-xl font-medium mb-4 flex items-center",
+                isDark ? "text-white" : "text-gray-800"
+              )}>
+                <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-500")} size={20} />
                 Importez votre fichier de tickets
               </h2>
               <TicketUpload onFileUploaded={handleFileUploaded} />
@@ -82,8 +92,12 @@ const Dashboard = () => {
         </motion.div>
       </main>
       
-      <GlowingOrb className="fixed top-1/4 left-1/5 -z-10" size={250} color="rgba(79, 70, 229, 0.08)" />
-      <GlowingOrb className="fixed bottom-1/4 right-1/5 -z-10" size={300} color="rgba(124, 58, 237, 0.06)" />
+      {isDark && (
+        <>
+          <GlowingOrb className="fixed top-1/4 left-1/5 -z-10" size={250} color="rgba(79, 70, 229, 0.08)" />
+          <GlowingOrb className="fixed bottom-1/4 right-1/5 -z-10" size={300} color="rgba(124, 58, 237, 0.06)" />
+        </>
+      )}
     </div>
   );
 };

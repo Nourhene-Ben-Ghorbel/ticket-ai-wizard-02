@@ -4,13 +4,13 @@ import { Eye, EyeOff } from "lucide-react";
 import { Input } from "./ui/input";
 import { FormControl, FormItem, FormLabel, FormMessage, useFormField } from "./ui/form";
 import { Control } from "react-hook-form";
+import { useTheme } from "@/hooks/useTheme";
 
 interface PasswordInputProps {
   control?: Control<any>;
   name: string;
   label: string;
   className?: string;
-  // Ajoutés pour résoudre l'erreur TypeScript
   labelClass?: string;
   inputClass?: string;
 }
@@ -18,6 +18,8 @@ interface PasswordInputProps {
 export const PasswordInput = ({ control, name, label, labelClass, inputClass, ...props }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const { error } = useFormField();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <FormItem>
@@ -26,14 +28,14 @@ export const PasswordInput = ({ control, name, label, labelClass, inputClass, ..
         <FormControl>
           <Input
             type={showPassword ? "text" : "password"}
-            className={`pr-10 ${inputClass || "bg-white/10 border-white/20"}`}
+            className={`pr-10 ${inputClass || (isDark ? "bg-white/10 border-white/20" : "bg-white border-gray-200")}`}
             {...props}
           />
         </FormControl>
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white"
+          className={isDark ? "absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white" : "absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"}
           tabIndex={-1}
         >
           {showPassword ? (
@@ -42,7 +44,7 @@ export const PasswordInput = ({ control, name, label, labelClass, inputClass, ..
             <Eye className="h-4 w-4" />
           )}
           <span className="sr-only">
-            {showPassword ? "Hide password" : "Show password"}
+            {showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
           </span>
         </button>
       </div>
