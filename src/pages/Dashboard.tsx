@@ -3,17 +3,22 @@ import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { TicketUpload } from "@/components/TicketUpload";
 import { ChatInterface } from "@/components/ChatInterface";
-import { Upload } from "lucide-react";
+import { Upload, ArrowRight } from "lucide-react";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Dashboard = () => {
   const [initialMessage, setInitialMessage] = useState<string | undefined>();
   const { theme } = useTheme();
+  const { isAdmin } = useAuth();
   const isDark = theme === "dark";
+  const navigate = useNavigate();
   
   const handleFileUploaded = (message: string) => {
     setInitialMessage(message);
@@ -62,7 +67,7 @@ const Dashboard = () => {
             
             <p className={cn(
               "text-lg mb-6",
-              isDark ? "text-blue-200" : "text-blue-700"
+              isDark ? "text-blue-200/90" : "text-blue-700/90"
             )}>
               Importez vos tickets pour analyse et obtenez des réponses assistées par IA
             </p>
@@ -88,6 +93,27 @@ const Dashboard = () => {
               transition={{ duration: 0.5 }}
             >
               <ChatInterface initialMessage={initialMessage} />
+            </motion.div>
+          )}
+          
+          {isAdmin && (
+            <motion.div 
+              className="mt-8 flex justify-end"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Button 
+                onClick={() => navigate('/admin')} 
+                variant="ghost" 
+                className={cn(
+                  "flex items-center gap-2",
+                  isDark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900/30" : "text-blue-600 hover:text-blue-700 hover:bg-blue-100"
+                )}
+              >
+                Voir le dashboard administrateur
+                <ArrowRight size={16} />
+              </Button>
             </motion.div>
           )}
         </motion.div>

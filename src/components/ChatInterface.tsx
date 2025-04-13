@@ -1,12 +1,14 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, User, Loader2, RefreshCw, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Send, Bot, User, Loader2, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { recordMessage } from "../api/mongodb";
 import { useTheme } from "@/hooks/useTheme";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   id: string;
@@ -25,9 +27,10 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
   const [loading, setLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const navigate = useNavigate();
 
   // Add system greeting and initial message if provided
   useEffect(() => {
@@ -137,6 +140,10 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
     }
   };
 
+  const navigateToAdmin = () => {
+    navigate('/admin');
+  };
+
   // Format timestamp
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -144,7 +151,6 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
 
   const MessageComponent = ({ message }: { message: Message }) => {
     const isUser = message.role === "user";
-    const [feedback, setFeedback] = useState<"like" | "dislike" | null>(null);
 
     return (
       <div className={cn("flex w-full mb-4", isUser ? "justify-end" : "justify-start")}>
@@ -152,16 +158,23 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           className={cn(
             "flex max-w-[80%] rounded-2xl p-3 space-x-3 items-center",
             isUser
-              ? "bg-blue-600 text-white rounded-tr-none"
-              : "bg-slate-800 text-white rounded-tl-none"
+              ? isDark 
+                 ? "bg-blue-600 text-white rounded-tr-none" 
+                 : "bg-blue-500 text-white rounded-tr-none"
+              : isDark
+                 ? "bg-slate-800 text-white rounded-tl-none"
+                 : "bg-slate-200 text-slate-900 rounded-tl-none"
           )}
         >
-          <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-full", 
-            isUser ? "bg-blue-700" : "bg-slate-700"
+          <div className={cn(
+            "flex h-8 w-8 shrink-0 items-center justify-center rounded-full", 
+            isUser 
+              ? isDark ? "bg-blue-700" : "bg-blue-600" 
+              : isDark ? "bg-slate-700" : "bg-slate-300"
           )}>
             {isUser ? 
               <User size={16} className="text-white" /> : 
-              <Bot size={16} className="text-white" />
+              <Bot size={16} className={isDark ? "text-white" : "text-slate-700"} />
             }
           </div>
           <p className="text-sm flex-1">{message.content}</p>
@@ -171,22 +184,50 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="flex flex-col h-[500px] bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
-      <div className="p-4 border-b border-slate-800 flex items-center">
+    <div className={cn(
+      "flex flex-col h-[500px] rounded-xl overflow-hidden border", 
+      isDark 
+        ? "bg-slate-900 border-slate-800" 
+        : "bg-white border-slate-200"
+    )}>
+      <div className={cn(
+        "p-4 border-b flex items-center justify-between",
+        isDark ? "border-slate-800" : "border-slate-200"
+      )}>
         <div className="flex items-center gap-2">
-          <Bot size={20} className="text-blue-400" />
-          <h3 className="font-medium text-white">MegSupport</h3>
+          <Bot size={20} className={isDark ? "text-blue-400" : "text-blue-500"} />
+          <h3 className={cn("font-medium", isDark ? "text-white" : "text-slate-900")}>MegSupport</h3>
         </div>
+        
+        {isAdmin && (
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={navigateToAdmin}
+            className={cn(
+              "hover:bg-opacity-10",
+              isDark ? "text-blue-400 hover:bg-blue-900" : "text-blue-500 hover:bg-blue-100"
+            )}
+          >
+            <ArrowLeft size={18} />
+          </Button>
+        )}
       </div>
       
-      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4 space-y-4 bg-slate-900">
+      <ScrollArea ref={scrollAreaRef} className={cn(
+        "flex-1 p-4 space-y-4",
+        isDark ? "bg-slate-900" : "bg-slate-50"
+      )}>
         {messages.map((message) => (
           <MessageComponent key={message.id} message={message} />
         ))}
         {loading && (
           <div className="flex w-full justify-start">
-            <div className="flex items-center bg-slate-800 text-white p-3 rounded-2xl rounded-tl-none space-x-3">
-              <Bot size={16} className="text-white" />
+            <div className={cn(
+              "flex items-center p-3 rounded-2xl rounded-tl-none space-x-3",
+              isDark ? "bg-slate-800 text-white" : "bg-slate-200 text-slate-900"
+            )}>
+              <Bot size={16} className={isDark ? "text-white" : "text-slate-700"} />
               <Loader2 size={16} className="animate-spin" />
               <span className="text-sm">Génération de la réponse...</span>
             </div>
@@ -194,14 +235,22 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
         )}
       </ScrollArea>
       
-      <div className="p-4 border-t border-slate-800 bg-slate-900">
+      <div className={cn(
+        "p-4 border-t",
+        isDark ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-white"
+      )}>
         <form onSubmit={handleSubmit} className="flex items-center space-x-2">
           <Input
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Décrivez votre problème en détail..."
-            className="flex-1 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500"
+            className={cn(
+              "flex-1",
+              isDark 
+                ? "bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500" 
+                : "bg-slate-100 border-slate-200 text-slate-900 placeholder-slate-500 focus:border-blue-500"
+            )}
             disabled={loading}
           />
           <Button 
@@ -209,7 +258,10 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
             size="icon" 
             disabled={loading || !input.trim()}
             className={cn(
-              "bg-blue-600 hover:bg-blue-700 text-white",
+              "text-white",
+              isDark
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-blue-500 hover:bg-blue-600",
               !input.trim() && "opacity-50 cursor-not-allowed"
             )}
           >
