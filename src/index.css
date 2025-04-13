@@ -155,4 +155,17 @@
   .space-mask {
     mask-image: radial-gradient(circle at center, black 40%, transparent 70%);
   }
+  
+  /* Title gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+  }
+
+  .dark .text-gradient {
+    @apply bg-gradient-to-r from-blue-300 via-indigo-200 to-purple-300;
+  }
+
+  .light .text-gradient {
+    @apply bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600;
+  }
 }

@@ -31,34 +31,34 @@ const AdminDashboard = () => {
       
       <main className="container mx-auto pt-24 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <h1 className={cn(
-                "text-2xl md:text-3xl font-bold",
-                isDark ? "text-white" : "text-gray-800"
-              )}>
-                Dashboard administrateur
-              </h1>
-              
-              <p className={cn(
-                "text-lg mb-6",
-                isDark ? "text-blue-200/90" : "text-blue-700/90"
-              )}>
-                Consultez les statistiques et analyses de performances sur les tickets traités.
-              </p>
-            </div>
-            
+          <div className="flex items-center mb-8">
             <Button 
               onClick={() => navigate('/dashboard')}
               variant="ghost" 
               className={cn(
-                "flex items-center gap-2",
+                "flex items-center gap-2 mr-4",
                 isDark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900/30" : "text-blue-600 hover:text-blue-700 hover:bg-blue-100"
               )}
             >
               <ArrowLeft size={16} />
               Traitement des tickets
             </Button>
+            
+            <div>
+              <h1 className={cn(
+                "text-4xl md:text-5xl font-bold text-gradient mb-2",
+                isDark ? "text-white" : "text-gray-800"
+              )}>
+                Dashboard administrateur
+              </h1>
+              
+              <p className={cn(
+                "text-lg",
+                isDark ? "text-blue-200/90" : "text-blue-700/90"
+              )}>
+                Consultez les statistiques et analyses de performances sur les tickets traités.
+              </p>
+            </div>
           </div>
           
           <Card className={cn(

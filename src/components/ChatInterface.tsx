@@ -3,12 +3,11 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, User, Loader2, ArrowLeft } from "lucide-react";
+import { Send, Bot, User, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { recordMessage } from "../api/mongodb";
 import { useTheme } from "@/hooks/useTheme";
-import { useNavigate } from "react-router-dom";
 
 interface Message {
   id: string;
@@ -27,10 +26,9 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
   const [loading, setLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const navigate = useNavigate();
 
   // Add system greeting and initial message if provided
   useEffect(() => {
@@ -140,10 +138,6 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
     }
   };
 
-  const navigateToAdmin = () => {
-    navigate('/admin');
-  };
-
   // Format timestamp
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -162,7 +156,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
                  ? "bg-blue-600 text-white rounded-tr-none" 
                  : "bg-blue-500 text-white rounded-tr-none"
               : isDark
-                 ? "bg-slate-800 text-white rounded-tl-none"
+                 ? "bg-slate-800 text-blue-100 rounded-tl-none"
                  : "bg-slate-200 text-slate-900 rounded-tl-none"
           )}
         >
@@ -198,20 +192,6 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           <Bot size={20} className={isDark ? "text-blue-400" : "text-blue-500"} />
           <h3 className={cn("font-medium", isDark ? "text-white" : "text-slate-900")}>MegSupport</h3>
         </div>
-        
-        {isAdmin && (
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={navigateToAdmin}
-            className={cn(
-              "hover:bg-opacity-10",
-              isDark ? "text-blue-400 hover:bg-blue-900" : "text-blue-500 hover:bg-blue-100"
-            )}
-          >
-            <ArrowLeft size={18} />
-          </Button>
-        )}
       </div>
       
       <ScrollArea ref={scrollAreaRef} className={cn(
@@ -225,9 +205,9 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           <div className="flex w-full justify-start">
             <div className={cn(
               "flex items-center p-3 rounded-2xl rounded-tl-none space-x-3",
-              isDark ? "bg-slate-800 text-white" : "bg-slate-200 text-slate-900"
+              isDark ? "bg-slate-800 text-blue-100" : "bg-slate-200 text-slate-900"
             )}>
-              <Bot size={16} className={isDark ? "text-white" : "text-slate-700"} />
+              <Bot size={16} className={isDark ? "text-blue-300" : "text-slate-700"} />
               <Loader2 size={16} className="animate-spin" />
               <span className="text-sm">Génération de la réponse...</span>
             </div>

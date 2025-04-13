@@ -57,21 +57,24 @@ const Dashboard = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants}>
+          <motion.div variants={itemVariants} className="text-center mb-8">
             <h1 className={cn(
-              "text-2xl md:text-3xl font-bold mb-2",
+              "text-4xl md:text-5xl font-bold text-gradient mb-4",
               isDark ? "text-white" : "text-gray-800"
             )}>
-              Traitement des tickets
+              Ticket AI Wizard
             </h1>
             
             <p className={cn(
-              "text-lg mb-6",
+              "text-lg max-w-2xl mx-auto",
               isDark ? "text-blue-200/90" : "text-blue-700/90"
             )}>
-              Importez vos tickets pour analyse et obtenez des réponses assistées par IA
+              Explorez l'univers de vos tickets avec notre IA avancée. Importez votre fichier 
+              pour obtenir des réponses instantanées.
             </p>
-            
+          </motion.div>
+          
+          <motion.div variants={itemVariants}>
             <div className="cosmic-card mb-6">
               <div className="p-6">
                 <h2 className={cn(
@@ -85,20 +88,10 @@ const Dashboard = () => {
               </div>
             </div>
           </motion.div>
-          
-          {initialMessage && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <ChatInterface initialMessage={initialMessage} />
-            </motion.div>
-          )}
-          
+
           {isAdmin && (
             <motion.div 
-              className="mt-8 flex justify-end"
+              className="mt-2 mb-4 flex justify-start"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -114,6 +107,16 @@ const Dashboard = () => {
                 Voir le dashboard administrateur
                 <ArrowRight size={16} />
               </Button>
+            </motion.div>
+          )}
+          
+          {initialMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <ChatInterface initialMessage={initialMessage} />
             </motion.div>
           )}
         </motion.div>
