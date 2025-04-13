@@ -1,18 +1,17 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { 
   Home,
-  BarChart3,
   LogOut,
   Menu,
   X,
-  MessageCircle,
   UserCircle,
-  Star,
   ChevronDown,
+  Star,
+  MessageCircle,
+  BarChart3,
   Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -98,7 +97,7 @@ export const Navbar = () => {
                 "w-10 h-10 rounded-full flex items-center justify-center relative",
                 isDark ? "bg-indigo-600 shadow-neon" : "bg-blue-600 shadow-md"
               )}>
-                <MessageCircle size={20} className="text-white" />
+                <UserCircle size={20} className="text-white" />
                 {isDark && (
                   <div className="absolute inset-0 rounded-full bg-indigo-600 blur-md opacity-50"></div>
                 )}
@@ -108,7 +107,6 @@ export const Navbar = () => {
             </Link>
           </motion.div>
 
-          {/* Desktop navigation */}
           <motion.nav
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -119,10 +117,6 @@ export const Navbar = () => {
               <>
                 <NavLink href="/" icon={<Home size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
                   Accueil
-                </NavLink>
-                
-                <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<MessageCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
-                  Traitement des tickets
                 </NavLink>
                 
                 <div 
@@ -166,7 +160,6 @@ export const Navbar = () => {
                   )}
                 </div>
                 
-                {/* Theme toggle for desktop */}
                 <div className="flex items-center">
                   <ThemeToggle />
                 </div>
@@ -195,9 +188,7 @@ export const Navbar = () => {
             )}
           </motion.nav>
           
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center gap-4">
-            {/* Theme toggle for mobile */}
             <ThemeToggle />
             
             <Button 
@@ -212,7 +203,6 @@ export const Navbar = () => {
         </div>
       </div>
       
-      {/* Mobile navigation */}
       {isOpen && (
         <motion.div 
           className="md:hidden cosmic-card m-2 p-4"

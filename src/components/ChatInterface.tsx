@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -151,123 +150,58 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
       <div className={cn("flex w-full mb-4", isUser ? "justify-end" : "justify-start")}>
         <div
           className={cn(
-            "flex max-w-[80%] rounded-2xl p-4",
+            "flex max-w-[80%] rounded-2xl p-3 space-x-3 items-center",
             isUser
-              ? "bg-blue-600 text-white rounded-tr-none shadow-md"
-              : isDark 
-                ? "bg-slate-800/90 text-white rounded-tl-none shadow-sm border border-blue-900/50" 
-                : "bg-white text-gray-800 rounded-tl-none shadow-sm border border-blue-50"
+              ? "bg-blue-600 text-white rounded-tr-none"
+              : "bg-slate-800 text-white rounded-tl-none"
           )}
         >
-          <div className={cn("mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full", 
-            isUser ? "bg-blue-700" : isDark ? "bg-blue-900" : "bg-blue-100"
+          <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-full", 
+            isUser ? "bg-blue-700" : "bg-slate-700"
           )}>
             {isUser ? 
               <User size={16} className="text-white" /> : 
-              <Bot size={16} className={isDark ? "text-blue-300" : "text-blue-600"} />
+              <Bot size={16} className="text-white" />
             }
           </div>
-          <div className="flex-1">
-            <div className="mb-1">
-              <p className={cn("text-sm font-medium", 
-                isUser ? "text-white" : isDark ? "text-white" : "text-gray-800"
-              )}>
-                {isUser ? "Vous" : "MegSupport"}
-              </p>
-              <p className={cn("text-xs", 
-                isUser ? "opacity-70 text-white" : isDark ? "text-blue-200/70" : "text-gray-500"
-              )}>
-                {formatTime(message.timestamp)}
-              </p>
-            </div>
-            <p className={cn("whitespace-pre-wrap text-sm", 
-              isUser ? "text-white" : isDark ? "text-white" : "text-gray-800"
-            )}>
-              {message.content}
-            </p>
-            
-            {!isUser && (
-              <div className="flex items-center justify-end gap-1 mt-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={cn("h-6 w-6", 
-                    feedback === "like" && (isDark ? "text-green-400" : "text-green-500")
-                  )}
-                  onClick={() => setFeedback("like")}
-                >
-                  <ThumbsUp size={14} className={isDark ? "text-blue-200" : "text-gray-600"} />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={cn("h-6 w-6", 
-                    feedback === "dislike" && (isDark ? "text-red-400" : "text-red-500")
-                  )}
-                  onClick={() => setFeedback("dislike")}
-                >
-                  <ThumbsDown size={14} className={isDark ? "text-blue-200" : "text-gray-600"} />
-                </Button>
-              </div>
-            )}
-          </div>
+          <p className="text-sm flex-1">{message.content}</p>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-13rem)] max-h-[800px] bg-white rounded-xl shadow-lg border border-blue-100">
-      <div className="p-4 border-b border-blue-100 flex justify-between items-center bg-gradient-to-r from-blue-50 to-white">
+    <div className="flex flex-col h-[500px] bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+      <div className="p-4 border-b border-slate-800 flex items-center">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-            <Bot size={20} className="text-blue-600" />
-          </div>
-          <h3 className="font-medium text-gray-800">MegSupport</h3>
+          <Bot size={20} className="text-blue-400" />
+          <h3 className="font-medium text-white">MegSupport</h3>
         </div>
-        <Button variant="outline" size="icon" className="h-8 w-8 text-gray-500 border-blue-100">
-          <RefreshCw size={16} />
-        </Button>
       </div>
       
-      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4 bg-gradient-to-br from-blue-50/30 to-white">
-        <div className="flex flex-col">
-          {messages.map((message) => (
-            <MessageComponent key={message.id} message={message} />
-          ))}
-          {loading && (
-            <div className="flex w-full mb-4 justify-start">
-              <div className={cn(
-                "flex items-center p-4 max-w-[80%] rounded-2xl rounded-tl-none",
-                isDark 
-                  ? "bg-slate-800/90 text-white shadow-sm border border-blue-900/50" 
-                  : "bg-white text-gray-800 shadow-sm border border-blue-50"
-              )}>
-                <div className={cn(
-                  "mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full",
-                  isDark ? "bg-blue-900" : "bg-blue-100"
-                )}>
-                  <Bot size={16} className={isDark ? "text-blue-300" : "text-blue-600"} />
-                </div>
-                <Loader2 size={16} className="animate-spin" />
-                <span className={cn(
-                  "ml-2 text-sm",
-                  isDark ? "text-white" : "text-gray-800"
-                )}>Génération de la réponse...</span>
-              </div>
+      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4 space-y-4 bg-slate-900">
+        {messages.map((message) => (
+          <MessageComponent key={message.id} message={message} />
+        ))}
+        {loading && (
+          <div className="flex w-full justify-start">
+            <div className="flex items-center bg-slate-800 text-white p-3 rounded-2xl rounded-tl-none space-x-3">
+              <Bot size={16} className="text-white" />
+              <Loader2 size={16} className="animate-spin" />
+              <span className="text-sm">Génération de la réponse...</span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </ScrollArea>
       
-      <div className="p-4 border-t border-blue-100 bg-white">
-        <form onSubmit={handleSubmit} className="flex items-center gap-2">
+      <div className="p-4 border-t border-slate-800 bg-slate-900">
+        <form onSubmit={handleSubmit} className="flex items-center space-x-2">
           <Input
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Posez une question sur votre ticket..."
-            className="flex-1 border-blue-200 focus:border-blue-400 rounded-lg text-gray-800"
+            placeholder="Décrivez votre problème en détail..."
+            className="flex-1 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500"
             disabled={loading}
           />
           <Button 
@@ -275,7 +209,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
             size="icon" 
             disabled={loading || !input.trim()}
             className={cn(
-              "bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md",
+              "bg-blue-600 hover:bg-blue-700 text-white",
               !input.trim() && "opacity-50 cursor-not-allowed"
             )}
           >
