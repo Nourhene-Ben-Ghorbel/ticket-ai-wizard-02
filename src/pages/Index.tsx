@@ -67,6 +67,7 @@ const Index = () => {
           <motion.h1 
             className="text-5xl md:text-7xl font-bold leading-tight mb-6 text-gradient font-raleway"
             variants={itemVariants}
+            style={{ lineHeight: '1.1' }} // Adjust line height to prevent cutting off
           >
             MegSupport
           </motion.h1>
@@ -152,3 +153,4 @@ const Index = () => {
 };
 
 export default Index;
+

@@ -4,8 +4,6 @@ import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
-  BarChart3, 
-  MessageCircle, 
   ArrowLeft
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +11,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const AdminDashboard = () => {
   const { theme } = useTheme();
@@ -56,10 +53,6 @@ const AdminDashboard = () => {
               )}>
                 Dashboard administrateur
               </h1>
-            </div>
-            
-            <div className="hidden md:block">
-              <ThemeToggle />
             </div>
           </div>
           
@@ -109,3 +102,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
