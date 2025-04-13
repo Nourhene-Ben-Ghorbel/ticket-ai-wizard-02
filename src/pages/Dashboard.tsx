@@ -53,6 +53,20 @@ const Dashboard = () => {
           animate="visible"
         >
           <motion.div variants={itemVariants}>
+            <h1 className={cn(
+              "text-2xl md:text-3xl font-bold mb-2",
+              isDark ? "text-white" : "text-gray-800"
+            )}>
+              Traitement des tickets
+            </h1>
+            
+            <p className={cn(
+              "text-lg mb-6",
+              isDark ? "text-blue-200" : "text-blue-700"
+            )}>
+              Importez vos tickets pour analyse et obtenez des réponses assistées par IA
+            </p>
+            
             <div className="cosmic-card mb-6">
               <div className="p-6">
                 <h2 className={cn(

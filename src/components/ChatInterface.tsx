@@ -7,6 +7,7 @@ import { Send, Bot, User, Loader2, RefreshCw, ThumbsUp, ThumbsDown } from "lucid
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { recordMessage } from "../api/mongodb";
+import { useTheme } from "@/hooks/useTheme";
 
 interface Message {
   id: string;
@@ -26,6 +27,8 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   // Add system greeting and initial message if provided
   useEffect(() => {
@@ -151,27 +154,35 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
             "flex max-w-[80%] rounded-2xl p-4",
             isUser
               ? "bg-blue-600 text-white rounded-tr-none shadow-md"
-              : "bg-white text-gray-800 rounded-tl-none shadow-sm border border-blue-50"
+              : isDark 
+                ? "bg-slate-800/90 text-white rounded-tl-none shadow-sm border border-blue-900/50" 
+                : "bg-white text-gray-800 rounded-tl-none shadow-sm border border-blue-50"
           )}
         >
           <div className={cn("mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full", 
-            isUser ? "bg-blue-700" : "bg-blue-100"
+            isUser ? "bg-blue-700" : isDark ? "bg-blue-900" : "bg-blue-100"
           )}>
             {isUser ? 
               <User size={16} className="text-white" /> : 
-              <Bot size={16} className="text-blue-600" />
+              <Bot size={16} className={isDark ? "text-blue-300" : "text-blue-600"} />
             }
           </div>
           <div className="flex-1">
             <div className="mb-1">
-              <p className="text-sm font-medium">
-                {isUser ? "Vous" : "Ticket AI Wizard"}
+              <p className={cn("text-sm font-medium", 
+                isUser ? "text-white" : isDark ? "text-white" : "text-gray-800"
+              )}>
+                {isUser ? "Vous" : "MegSupport"}
               </p>
-              <p className="text-xs opacity-70">
+              <p className={cn("text-xs", 
+                isUser ? "opacity-70 text-white" : isDark ? "text-blue-200/70" : "text-gray-500"
+              )}>
                 {formatTime(message.timestamp)}
               </p>
             </div>
-            <p className="whitespace-pre-wrap text-sm">
+            <p className={cn("whitespace-pre-wrap text-sm", 
+              isUser ? "text-white" : isDark ? "text-white" : "text-gray-800"
+            )}>
               {message.content}
             </p>
             
@@ -180,18 +191,22 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={cn("h-6 w-6", feedback === "like" && "text-green-500")}
+                  className={cn("h-6 w-6", 
+                    feedback === "like" && (isDark ? "text-green-400" : "text-green-500")
+                  )}
                   onClick={() => setFeedback("like")}
                 >
-                  <ThumbsUp size={14} />
+                  <ThumbsUp size={14} className={isDark ? "text-blue-200" : "text-gray-600"} />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={cn("h-6 w-6", feedback === "dislike" && "text-red-500")}
+                  className={cn("h-6 w-6", 
+                    feedback === "dislike" && (isDark ? "text-red-400" : "text-red-500")
+                  )}
                   onClick={() => setFeedback("dislike")}
                 >
-                  <ThumbsDown size={14} />
+                  <ThumbsDown size={14} className={isDark ? "text-blue-200" : "text-gray-600"} />
                 </Button>
               </div>
             )}
@@ -208,7 +223,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
             <Bot size={20} className="text-blue-600" />
           </div>
-          <h3 className="font-medium text-gray-800">Ticket AI Wizard</h3>
+          <h3 className="font-medium text-gray-800">MegSupport</h3>
         </div>
         <Button variant="outline" size="icon" className="h-8 w-8 text-gray-500 border-blue-100">
           <RefreshCw size={16} />
@@ -222,14 +237,23 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           ))}
           {loading && (
             <div className="flex w-full mb-4 justify-start">
-              <div className="bg-white rounded-2xl rounded-tl-none p-4 max-w-[80%] text-gray-800 shadow-sm border border-blue-50">
-                <div className="flex items-center">
-                  <div className="mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100">
-                    <Bot size={16} className="text-blue-600" />
-                  </div>
-                  <Loader2 size={16} className="animate-spin" />
-                  <span className="ml-2 text-sm">Génération de la réponse...</span>
+              <div className={cn(
+                "flex items-center p-4 max-w-[80%] rounded-2xl rounded-tl-none",
+                isDark 
+                  ? "bg-slate-800/90 text-white shadow-sm border border-blue-900/50" 
+                  : "bg-white text-gray-800 shadow-sm border border-blue-50"
+              )}>
+                <div className={cn(
+                  "mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full",
+                  isDark ? "bg-blue-900" : "bg-blue-100"
+                )}>
+                  <Bot size={16} className={isDark ? "text-blue-300" : "text-blue-600"} />
                 </div>
+                <Loader2 size={16} className="animate-spin" />
+                <span className={cn(
+                  "ml-2 text-sm",
+                  isDark ? "text-white" : "text-gray-800"
+                )}>Génération de la réponse...</span>
               </div>
             </div>
           )}
@@ -243,7 +267,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Posez une question sur votre ticket..."
-            className="flex-1 border-blue-200 focus:border-blue-400 rounded-lg"
+            className="flex-1 border-blue-200 focus:border-blue-400 rounded-lg text-gray-800"
             disabled={loading}
           />
           <Button 

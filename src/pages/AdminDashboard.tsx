@@ -2,10 +2,6 @@
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { 
-  ArrowLeft
-} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
@@ -35,18 +31,6 @@ const AdminDashboard = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                className={cn(
-                  "flex items-center gap-2",
-                  isDark ? "text-blue-200 hover:bg-blue-900/30" : "text-blue-700 hover:bg-blue-50"
-                )}
-                onClick={() => navigate("/dashboard")}
-              >
-                <ArrowLeft size={18} />
-                <span>Traitement des tickets</span>
-              </Button>
-              
               <h1 className={cn(
                 "text-2xl md:text-3xl font-bold",
                 isDark ? "text-white" : "text-gray-800"
@@ -55,6 +39,13 @@ const AdminDashboard = () => {
               </h1>
             </div>
           </div>
+          
+          <p className={cn(
+            "text-lg mb-6",
+            isDark ? "text-blue-200" : "text-blue-700"
+          )}>
+            Consultez les statistiques et analyses de performances sur les tickets traités.
+          </p>
           
           <Card className={cn(
             "mb-6 p-4 relative overflow-hidden",
@@ -102,4 +93,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
