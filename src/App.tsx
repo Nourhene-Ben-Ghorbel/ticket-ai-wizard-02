@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +13,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import AdminUpload from "./pages/AdminUpload";
 
 // Create Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -76,6 +76,14 @@ const App = () => (
                   element={
                     <AdminRoute>
                       <AdminDashboard />
+                    </AdminRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/upload" 
+                  element={
+                    <AdminRoute>
+                      <AdminUpload />
                     </AdminRoute>
                   } 
                 />
