@@ -1,9 +1,8 @@
-
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { FileUpload, FileSpreadsheet, Check, X } from "lucide-react";
+import { Upload, FileSpreadsheet, Check, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/useTheme";
@@ -105,7 +104,7 @@ export const AdminFileUpload = () => {
                   ? "bg-gray-800"
                   : "bg-gray-100"
             )}>
-              <FileUpload 
+              <Upload 
                 size={36} 
                 className={cn(
                   isDragActive
@@ -203,7 +202,7 @@ export const AdminFileUpload = () => {
                 isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
               )}
             >
-              <FileUpload size={18} className="mr-2" />
+              <Upload size={18} className="mr-2" />
               Importer dans la base de données
             </Button>
           )}

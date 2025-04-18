@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
@@ -6,9 +7,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FileUpload } from "@/components/FileUpload";
 
 const AdminDashboard = () => {
   const { theme } = useTheme();
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
                   isDark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900/30" : "text-blue-600 hover:text-blue-700 hover:bg-blue-100"
                 )}
               >
-                <FileUpload size={16} />
+                <Upload size={16} />
                 Importer des données
               </Button>
             </div>
