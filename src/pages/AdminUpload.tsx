@@ -7,7 +7,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
-import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
 
@@ -28,18 +27,6 @@ const AdminUpload = () => {
       <main className="container mx-auto pt-24 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center mb-8">
-            <Button 
-              onClick={() => navigate('/admin')}
-              variant="ghost" 
-              className={cn(
-                "flex items-center gap-2 mr-4",
-                isDark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900/30" : "text-blue-600 hover:text-blue-700 hover:bg-blue-100"
-              )}
-            >
-              <ArrowLeft size={16} />
-              Dashboard administrateur
-            </Button>
-            
             <div>
               <h1 className={cn(
                 "text-4xl md:text-5xl font-bold text-gradient mb-2",

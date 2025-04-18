@@ -7,7 +7,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
-import { ArrowLeft, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const AdminDashboard = () => {
@@ -32,32 +31,6 @@ const AdminDashboard = () => {
       <main className="container mx-auto pt-24 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col gap-4 mb-8">
-            <div className="flex items-center gap-4">
-              <Button 
-                onClick={() => navigate('/dashboard')}
-                variant="ghost" 
-                className={cn(
-                  "flex items-center gap-2",
-                  isDark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900/30" : "text-blue-600 hover:text-blue-700 hover:bg-blue-100"
-                )}
-              >
-                <ArrowLeft size={16} />
-                Traitement des tickets
-              </Button>
-              
-              <Button 
-                onClick={() => navigate('/admin/upload')}
-                variant="ghost" 
-                className={cn(
-                  "flex items-center gap-2",
-                  isDark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900/30" : "text-blue-600 hover:text-blue-700 hover:bg-blue-100"
-                )}
-              >
-                <Upload size={16} />
-                Importer des données
-              </Button>
-            </div>
-
             <div>
               <h1 className={cn(
                 "text-4xl md:text-5xl font-bold text-gradient mb-2",

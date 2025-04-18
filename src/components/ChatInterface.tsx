@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Bot } from "lucide-react";
@@ -64,7 +65,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
     }
   }, [messages]);
 
-  // Message component remains the same
+  // Message component with improved dark mode text colors
   const MessageComponent = ({ message }: { message: Message }) => {
     return (
       <div className="flex w-full mb-4 justify-start">
@@ -80,7 +81,12 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           )}>
             <Bot size={16} className={isDark ? "text-blue-300" : "text-blue-600"} />
           </div>
-          <p className="text-sm flex-1 leading-relaxed">{message.content}</p>
+          <p className={cn(
+            "text-sm flex-1 leading-relaxed",
+            isDark ? "text-blue-50" : "text-slate-900" // Improved text contrast in dark mode
+          )}>
+            {message.content}
+          </p>
         </div>
       </div>
     );

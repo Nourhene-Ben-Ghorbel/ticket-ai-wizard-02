@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Upload, FileSpreadsheet, Check, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/useTheme";
+import { uploadExcelFile } from "../api/fastApiService";
 
 export const AdminFileUpload = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -58,22 +60,44 @@ export const AdminFileUpload = () => {
     
     setUploading(true);
     
-    for (let i = 0; i <= 100; i += 10) {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      setProgress(i);
+    try {
+      // Upload the file to the FastAPI backend
+      const uploadResponse = await uploadExcelFile(file);
+      
+      // Simulate progress during upload and processing
+      const simulateProgress = async () => {
+        for (let i = 0; i <= 100; i += 5) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          setProgress(i);
+        }
+      };
+      
+      await simulateProgress();
+      
+      if (uploadResponse.status === 'success') {
+        toast({
+          title: "Téléchargement réussi",
+          description: uploadResponse.message || `Le fichier ${file.name} a été importé avec succès dans la base de données.`,
+        });
+      } else {
+        toast({
+          title: "Erreur lors du téléchargement",
+          description: uploadResponse.message || "Une erreur est survenue lors du téléchargement du fichier.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast({
+        title: "Erreur de téléchargement",
+        description: "Une erreur est survenue lors du téléchargement du fichier.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+      setFile(null);
+      setProgress(0);
     }
-    
-    // Simulate processing data
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    toast({
-      title: "Téléchargement réussi",
-      description: `Le fichier ${file.name} a été importé avec succès dans la base de données.`,
-    });
-    
-    setUploading(false);
-    setFile(null);
-    setProgress(0);
   };
   
   return (

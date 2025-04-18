@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,6 +13,7 @@ import {
   Star,
   MessageCircle,
   BarChart3,
+  Upload,
   Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -119,6 +121,17 @@ export const Navbar = () => {
                   Accueil
                 </NavLink>
                 
+                {isAdmin && (
+                  <>
+                    <NavLink href="/admin" icon={<BarChart3 size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                      Dashboard Admin
+                    </NavLink>
+                    <NavLink href="/admin/upload" icon={<Upload size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                      Import des données
+                    </NavLink>
+                  </>
+                )}
+                
                 <div 
                   ref={userDropdownRef} 
                   className="relative"
@@ -217,9 +230,16 @@ export const Navbar = () => {
                   Accueil
                 </NavLink>
 
-                <NavLink href={isAdmin ? "/admin" : "/dashboard"} icon={<MessageCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
-                  Traitement des tickets
-                </NavLink>
+                {isAdmin && (
+                  <>
+                    <NavLink href="/admin" icon={<BarChart3 size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                      Dashboard Admin
+                    </NavLink>
+                    <NavLink href="/admin/upload" icon={<Upload size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                      Import des données
+                    </NavLink>
+                  </>
+                )}
                 
                 <div className={cn(
                   "flex items-center gap-2 px-3 py-1.5 rounded-full w-fit",

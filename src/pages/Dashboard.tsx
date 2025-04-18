@@ -74,24 +74,9 @@ const Dashboard = () => {
             </p>
           </motion.div>
           
-          <motion.div variants={itemVariants}>
-            <div className="cosmic-card mb-6">
-              <div className="p-6">
-                <h2 className={cn(
-                  "text-xl font-medium mb-4 flex items-center",
-                  isDark ? "text-white" : "text-gray-800"
-                )}>
-                  <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-600")} size={20} />
-                  Importez votre fichier de tickets
-                </h2>
-                <TicketUpload onFileUploaded={handleFileUploaded} />
-              </div>
-            </div>
-          </motion.div>
-
           {isAdmin && (
             <motion.div 
-              className="mt-2 mb-4 flex justify-start"
+              className="mb-6 flex justify-start"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -109,6 +94,21 @@ const Dashboard = () => {
               </Button>
             </motion.div>
           )}
+          
+          <motion.div variants={itemVariants}>
+            <div className="cosmic-card mb-6">
+              <div className="p-6">
+                <h2 className={cn(
+                  "text-xl font-medium mb-4 flex items-center",
+                  isDark ? "text-white" : "text-gray-800"
+                )}>
+                  <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-600")} size={20} />
+                  Importez votre fichier de tickets
+                </h2>
+                <TicketUpload onFileUploaded={handleFileUploaded} />
+              </div>
+            </div>
+          </motion.div>
           
           {initialMessage && (
             <motion.div

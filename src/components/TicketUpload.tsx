@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FileCode2, Upload, X, FileSpreadsheet, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { searchSimilarTickets } from "../api/fastApiService";
 
 export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string) => void }) => {
   const [file, setFile] = useState<File | null>(null);
@@ -59,33 +60,97 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     
     setUploading(true);
     
-    // Simulate upload process with progress
-    for (let i = 0; i <= 100; i += 10) {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      setProgress(i);
+    try {
+      // Simulate file reading for content extraction
+      const fileContent = await readFileAsText(file);
+      
+      // Set progress to simulate file reading completion
+      for (let i = 0; i <= 50; i += 10) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        setProgress(i);
+      }
+      
+      // Search for similar tickets using the file content
+      const searchResult = await searchSimilarTickets(fileContent);
+      
+      // Complete the progress bar
+      for (let i = 50; i <= 100; i += 10) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        setProgress(i);
+      }
+      
+      // Process the search result
+      if (searchResult.status === 'success' && searchResult.tickets && searchResult.tickets.length > 0) {
+        // Found similar tickets - display the best solution
+        const bestMatch = searchResult.tickets[0];
+        const responseMessage = `
+          J'ai trouvé une solution pour votre ticket! 
+          
+          **Problème identifié:** ${bestMatch.problem}
+          
+          **Solution:** ${bestMatch.solution}
+          
+          *Score de similarité: ${(bestMatch.similarity_score * 100).toFixed(1)}%*
+        `;
+        
+        toast({
+          title: "Solution trouvée",
+          description: `Une solution a été trouvée avec un score de similarité de ${(bestMatch.similarity_score * 100).toFixed(1)}%`,
+        });
+        
+        onFileUploaded(responseMessage);
+      } else if (searchResult.status === 'not_found') {
+        // No similar tickets found
+        const noMatchMessage = `
+          Je n'ai pas trouvé de ticket similaire dans notre base de données.
+          
+          Veuillez soumettre ce ticket à notre équipe support pour une résolution manuelle.
+        `;
+        
+        toast({
+          title: "Aucune correspondance",
+          description: "Aucun ticket similaire n'a été trouvé dans notre base de données.",
+        });
+        
+        onFileUploaded(noMatchMessage);
+      } else {
+        // Error in search
+        toast({
+          title: "Erreur de recherche",
+          description: searchResult.message || "Une erreur est survenue lors de la recherche.",
+          variant: "destructive",
+        });
+        
+        onFileUploaded("Une erreur est survenue lors de l'analyse de votre ticket. Veuillez réessayer.");
+      }
+    } catch (error) {
+      console.error("Error processing file:", error);
+      toast({
+        title: "Erreur de traitement",
+        description: "Une erreur est survenue lors du traitement du fichier.",
+        variant: "destructive",
+      });
+      
+      onFileUploaded("Une erreur est survenue lors de l'analyse de votre ticket. Veuillez réessayer.");
+    } finally {
+      setUploading(false);
     }
-    
-    // Simulate processing data
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // In a real implementation, you'd send the file to your Django backend:
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // const response = await fetch('YOUR_API_URL/upload', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
-    
-    // For demo, we'll just simulate a response
-    const mockResponse = `Les données de votre fichier ${file.name} ont été traitées. Vous pouvez maintenant discuter avec notre IA.`;
-    
-    toast({
-      title: "Téléchargement réussi",
-      description: `Le fichier ${file.name} a été téléchargé et traité avec succès.`,
+  };
+  
+  // Helper function to read file content as text
+  const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          resolve(event.target.result.toString());
+        } else {
+          reject(new Error("Failed to read file"));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsText(file);
     });
-    
-    setUploading(false);
-    onFileUploaded(mockResponse);
   };
   
   return (
@@ -155,7 +220,7 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
             <div className="space-y-2">
               <Progress value={progress} className="h-2" />
               <p className="text-sm text-center text-gray-500">
-                {progress < 100 ? `Téléchargement ${progress}%...` : "Traitement des données..."}
+                {progress < 50 ? `Analyse du fichier ${progress}%...` : `Recherche de solutions ${progress}%...`}
               </p>
             </div>
           ) : (
