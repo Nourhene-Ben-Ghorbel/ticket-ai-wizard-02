@@ -27,6 +27,44 @@ interface FileUploadResponse {
   timestamp?: string;
 }
 
+// Interface pour la création d'utilisateur
+interface UserCreationResponse {
+  status: 'success' | 'error';
+  message: string;
+  user?: {
+    id: string;
+    username: string;
+    email: string;
+    isAdmin: boolean;
+  };
+  password?: string; // Mot de passe généré
+}
+
+/**
+ * Valide si le fichier Excel est correctement formaté pour la recherche
+ * (doit contenir un en-tête et une seule ligne de données)
+ */
+export async function validateExcelFormat(file: File): Promise<{ isValid: boolean; message: string }> {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post(`${API_BASE_URL}/validate-excel`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la validation du fichier:', error);
+    return { 
+      isValid: false, 
+      message: "Erreur lors de la validation du format du fichier Excel."
+    };
+  }
+}
+
 /**
  * Search for similar tickets using the embeddings AI
  * @param ticketText The text content of the ticket to search
@@ -89,6 +127,26 @@ export async function getTicketStats() {
     return {
       status: 'error',
       message: 'Une erreur est survenue lors de la récupération des statistiques.'
+    };
+  }
+}
+
+/**
+ * Créer un nouvel utilisateur (admin uniquement)
+ */
+export async function createUser(username: string, email: string): Promise<UserCreationResponse> {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/create-user`, {
+      username,
+      email
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la création de l\'utilisateur:', error);
+    return {
+      status: 'error',
+      message: 'Une erreur est survenue lors de la création de l\'utilisateur.'
     };
   }
 }

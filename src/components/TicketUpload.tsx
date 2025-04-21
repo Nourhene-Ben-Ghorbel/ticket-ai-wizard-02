@@ -1,23 +1,28 @@
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { FileCode2, Upload, X, FileSpreadsheet, Check } from "lucide-react";
+import { FileCode2, Upload, X, FileSpreadsheet, ChevronDown, ChevronUp, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { searchSimilarTickets } from "../api/fastApiService";
+import { searchSimilarTickets, validateExcelFormat } from "../api/fastApiService";
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/utils";
+import { useSearchHistory } from "@/hooks/useSearchHistory";
 
-export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string) => void }) => {
+export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string, ticketIds?: string[]) => void }) => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [expanded, setExpanded] = useState(false);
   const { toast } = useToast();
+  const { theme } = useTheme();
+  const { addToHistory } = useSearchHistory();
+  const isDark = theme === "dark";
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const selectedFile = acceptedFiles[0];
     
     if (selectedFile) {
-      // Check if file is Excel or CSV
+      // Vérifier le format du fichier
       const fileType = selectedFile.type;
       if (
         fileType !== "application/vnd.ms-excel" &&
@@ -30,6 +35,17 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         toast({
           title: "Format non supporté",
           description: "Veuillez télécharger un fichier Excel (.xlsx, .xls) ou CSV",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Valider le format du contenu (en-tête + 1 ligne)
+      const validationResult = await validateExcelFormat(selectedFile);
+      if (!validationResult.isValid) {
+        toast({
+          title: "Format incorrect",
+          description: validationResult.message,
           variant: "destructive",
         });
         return;
@@ -52,7 +68,7 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
   
   const removeFile = () => {
     setFile(null);
-    setProgress(0);
+    setExpanded(false);
   };
   
   const uploadFile = async () => {
@@ -61,28 +77,23 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     setUploading(true);
     
     try {
-      // Simulate file reading for content extraction
+      // Simulation file reading for content extraction
       const fileContent = await readFileAsText(file);
-      
-      // Set progress to simulate file reading completion
-      for (let i = 0; i <= 50; i += 10) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        setProgress(i);
-      }
       
       // Search for similar tickets using the file content
       const searchResult = await searchSimilarTickets(fileContent);
-      
-      // Complete the progress bar
-      for (let i = 50; i <= 100; i += 10) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        setProgress(i);
-      }
       
       // Process the search result
       if (searchResult.status === 'success' && searchResult.tickets && searchResult.tickets.length > 0) {
         // Found similar tickets - display the best solution
         const bestMatch = searchResult.tickets[0];
+        const ticketIds = searchResult.tickets.map(t => t.ticket_id);
+        
+        // Construire un message avec tous les IDs de tickets similaires
+        const ticketIdList = searchResult.tickets
+          .map(t => `- ID: ${t.ticket_id} (score: ${(t.similarity_score * 100).toFixed(1)}%)`)
+          .join('\n');
+        
         const responseMessage = `
           J'ai trouvé une solution pour votre ticket! 
           
@@ -90,7 +101,10 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           
           **Solution:** ${bestMatch.solution}
           
-          *Score de similarité: ${(bestMatch.similarity_score * 100).toFixed(1)}%*
+          **Tickets similaires trouvés:**
+          ${ticketIdList}
+          
+          *Temps de recherche: ${searchResult.temps_recherche?.toFixed(2)}s*
         `;
         
         toast({
@@ -98,7 +112,14 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           description: `Une solution a été trouvée avec un score de similarité de ${(bestMatch.similarity_score * 100).toFixed(1)}%`,
         });
         
-        onFileUploaded(responseMessage);
+        // Ajouter à l'historique de recherche
+        addToHistory({
+          queryText: file.name,
+          result: responseMessage,
+          ticketIds: ticketIds
+        });
+        
+        onFileUploaded(responseMessage, ticketIds);
       } else if (searchResult.status === 'not_found') {
         // No similar tickets found
         const noMatchMessage = `
@@ -110,6 +131,12 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         toast({
           title: "Aucune correspondance",
           description: "Aucun ticket similaire n'a été trouvé dans notre base de données.",
+        });
+        
+        // Ajouter à l'historique de recherche
+        addToHistory({
+          queryText: file.name,
+          result: noMatchMessage
         });
         
         onFileUploaded(noMatchMessage);
@@ -153,84 +180,141 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     });
   };
   
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
+  
   return (
     <div className="w-full max-w-lg mx-auto">
       {!file ? (
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
+          className={cn(
+            "border-2 border-dashed rounded-xl p-6 sm:p-8 text-center transition-colors",
             isDragActive 
-              ? "border-blue-500 bg-blue-50" 
-              : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/30"
-          }`}
+              ? isDark
+                ? "border-blue-500 bg-blue-900/20" 
+                : "border-blue-500 bg-blue-50" 
+              : isDark
+                ? "border-gray-700 hover:border-blue-500 hover:bg-blue-900/10"
+                : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/30"
+          )}
         >
           <input {...getInputProps()} />
-          <div className="flex flex-col items-center justify-center space-y-4">
-            <div className={`p-4 rounded-full ${isDragActive ? 'bg-blue-100' : 'bg-gray-100'}`}>
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className={cn(
+              "p-3 rounded-full",
+              isDragActive 
+                ? isDark
+                  ? "bg-blue-900/50"
+                  : "bg-blue-100" 
+                : isDark
+                  ? "bg-gray-800"
+                  : "bg-gray-100"
+            )}>
               <Upload 
-                size={36} 
+                size={30} 
                 className={isDragActive ? 'text-blue-600' : 'text-gray-400'} 
               />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-800">
-                {isDragActive ? "Déposez votre fichier ici" : "Glissez-déposez votre fichier"}
+              <h3 className="text-lg font-medium text-foreground">
+                {isDragActive ? "Déposez votre fichier ici" : "Importer un ticket"}
               </h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className={cn(
+                "text-sm mt-1",
+                isDark ? "text-gray-400" : "text-gray-500"
+              )}>
                 Formats supportés: XLSX, XLS, CSV
               </p>
             </div>
             <Button 
               type="button" 
               variant="outline"
-              className="mt-2 border-blue-400 text-blue-600"
+              className={cn(
+                "mt-1",
+                isDark 
+                  ? "border-blue-700 text-blue-400 hover:bg-blue-900/30"
+                  : "border-blue-200 text-blue-600"
+              )}
             >
               Parcourir les fichiers
             </Button>
           </div>
         </div>
       ) : (
-        <div className="border rounded-xl p-6 bg-white shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className={cn(
+          "border rounded-xl",
+          isDark ? "bg-card/30 border-gray-800" : "bg-white border-gray-200"
+        )}>
+          <div 
+            className={cn(
+              "p-4 flex items-center justify-between cursor-pointer",
+              isDark ? "hover:bg-gray-800/50" : "hover:bg-gray-50"
+            )}
+            onClick={toggleExpand}
+          >
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <FileSpreadsheet size={24} className="text-blue-600" />
+              <div className={cn(
+                "p-2 rounded-lg",
+                isDark ? "bg-blue-900/50" : "bg-blue-100"
+              )}>
+                <FileSpreadsheet size={20} className={isDark ? "text-blue-400" : "text-blue-600"} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate text-gray-800" title={file.name}>
+                <p className="text-sm font-medium truncate" title={file.name}>
                   {file.name}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {(file.size / 1024).toFixed(2)} KB
                 </p>
               </div>
+              {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={removeFile}
-              disabled={uploading}
-              className="text-gray-500"
-            >
-              <X size={18} />
-            </Button>
           </div>
           
-          {uploading ? (
-            <div className="space-y-2">
-              <Progress value={progress} className="h-2" />
-              <p className="text-sm text-center text-gray-500">
-                {progress < 50 ? `Analyse du fichier ${progress}%...` : `Recherche de solutions ${progress}%...`}
-              </p>
+          {expanded && (
+            <div className="p-4 pt-0 border-t border-gray-100 dark:border-gray-800">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm text-muted-foreground">
+                  Ce fichier sera analysé pour trouver des tickets similaires
+                </p>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={removeFile}
+                  disabled={uploading}
+                  className="text-gray-500 h-8"
+                >
+                  <X size={16} />
+                </Button>
+              </div>
+              
+              {uploading ? (
+                <div className="py-6 flex flex-col items-center space-y-3">
+                  <div className="animate-spin text-blue-500">
+                    <Loader className="h-8 w-8" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium">Analyse en cours...</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Recherche de tickets similaires dans la base de données
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <Button 
+                  onClick={uploadFile} 
+                  className={cn(
+                    "w-full",
+                    isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-600 hover:bg-blue-700"
+                  )}
+                >
+                  <FileCode2 size={16} className="mr-2" />
+                  Analyser avec l'IA
+                </Button>
+              )}
             </div>
-          ) : (
-            <Button 
-              onClick={uploadFile} 
-              className="w-full mt-2 bg-blue-600 hover:bg-blue-700"
-            >
-              <FileCode2 size={18} className="mr-2" />
-              Analyser avec l'IA
-            </Button>
           )}
         </div>
       )}

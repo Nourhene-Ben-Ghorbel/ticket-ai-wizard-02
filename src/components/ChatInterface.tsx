@@ -12,13 +12,15 @@ interface Message {
   content: string;
   role: "user" | "assistant";
   timestamp: Date;
+  ticketIds?: string[];
 }
 
 interface ChatInterfaceProps {
   initialMessage?: string;
+  ticketIds?: string[];
 }
 
-export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
+export const ChatInterface = ({ initialMessage, ticketIds }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
@@ -42,6 +44,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
         content: initialMessage,
         role: "assistant",
         timestamp: new Date(),
+        ticketIds: ticketIds
       });
       
       // Record the assistant message in MongoDB if user is logged in
@@ -53,7 +56,7 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
     }
 
     setMessages(initialMessages);
-  }, [initialMessage, user?.id]);
+  }, [initialMessage, ticketIds, user?.id]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -65,12 +68,12 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
     }
   }, [messages]);
 
-  // Message component with improved dark mode text colors
+  // Message component with improved display
   const MessageComponent = ({ message }: { message: Message }) => {
     return (
       <div className="flex w-full mb-4 justify-start">
         <div className={cn(
-          "flex max-w-[80%] rounded-2xl p-4 space-x-3 items-start",
+          "flex max-w-[90%] rounded-2xl p-4 space-x-3 items-start",
           isDark
             ? "bg-slate-800/90 text-blue-100 rounded-tl-none"
             : "bg-white text-slate-900 rounded-tl-none border border-gray-200"
@@ -81,12 +84,14 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
           )}>
             <Bot size={16} className={isDark ? "text-blue-300" : "text-blue-600"} />
           </div>
-          <p className={cn(
-            "text-sm flex-1 leading-relaxed",
-            isDark ? "text-blue-50" : "text-slate-900" // Improved text contrast in dark mode
-          )}>
-            {message.content}
-          </p>
+          <div className="flex-1 leading-relaxed space-y-1">
+            <div className={cn(
+              "text-sm",
+              isDark ? "text-blue-50" : "text-slate-900"
+            )}>
+              {message.content}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -100,12 +105,12 @@ export const ChatInterface = ({ initialMessage }: ChatInterfaceProps) => {
         : "bg-gray-50 border-gray-200"
     )}>
       <div className={cn(
-        "p-4 border-b flex items-center justify-between",
+        "p-3 border-b flex items-center justify-between",
         isDark ? "border-slate-800" : "border-gray-200"
       )}>
         <div className="flex items-center gap-2">
-          <Bot size={20} className={isDark ? "text-blue-400" : "text-blue-500"} />
-          <h3 className={cn("font-medium", isDark ? "text-white" : "text-slate-900")}>
+          <Bot size={18} className={isDark ? "text-blue-400" : "text-blue-500"} />
+          <h3 className={cn("font-medium text-sm", isDark ? "text-white" : "text-slate-900")}>
             Assistant IA
           </h3>
         </div>

@@ -2,8 +2,7 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Upload, FileSpreadsheet, Check, X } from "lucide-react";
+import { Upload, FileSpreadsheet, Check, X, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/useTheme";
@@ -12,10 +11,10 @@ import { uploadExcelFile } from "../api/fastApiService";
 export const AdminFileUpload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const { toast } = useToast();
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const [expanded, setExpanded] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const selectedFile = acceptedFiles[0];
@@ -37,6 +36,7 @@ export const AdminFileUpload = () => {
       }
       
       setFile(selectedFile);
+      setExpanded(true);
     }
   }, [toast]);
   
@@ -52,7 +52,7 @@ export const AdminFileUpload = () => {
   
   const removeFile = () => {
     setFile(null);
-    setProgress(0);
+    setExpanded(false);
   };
   
   const uploadFile = async () => {
@@ -63,16 +63,6 @@ export const AdminFileUpload = () => {
     try {
       // Upload the file to the FastAPI backend
       const uploadResponse = await uploadExcelFile(file);
-      
-      // Simulate progress during upload and processing
-      const simulateProgress = async () => {
-        for (let i = 0; i <= 100; i += 5) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          setProgress(i);
-        }
-      };
-      
-      await simulateProgress();
       
       if (uploadResponse.status === 'success') {
         toast({
@@ -96,8 +86,12 @@ export const AdminFileUpload = () => {
     } finally {
       setUploading(false);
       setFile(null);
-      setProgress(0);
+      setExpanded(false);
     }
+  };
+  
+  const toggleExpand = () => {
+    setExpanded(!expanded);
   };
   
   return (
@@ -169,10 +163,16 @@ export const AdminFileUpload = () => {
         </div>
       ) : (
         <div className={cn(
-          "border rounded-xl p-6",
+          "border rounded-xl",
           isDark ? "bg-gray-900/50 border-gray-700" : "bg-white border-gray-200"
         )}>
-          <div className="flex items-center justify-between mb-4">
+          <div 
+            className={cn(
+              "p-4 flex items-center justify-between cursor-pointer",
+              isDark ? "hover:bg-gray-800/50" : "hover:bg-gray-50"
+            )}
+            onClick={toggleExpand}
+          >
             <div className="flex items-center space-x-3">
               <div className={cn(
                 "p-2 rounded-lg",
@@ -195,40 +195,52 @@ export const AdminFileUpload = () => {
                 </p>
               </div>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={removeFile}
-              disabled={uploading}
-              className={cn(
-                isDark ? "text-gray-400 hover:text-white" : "text-gray-500"
-              )}
-            >
-              <X size={18} />
-            </Button>
           </div>
           
-          {uploading ? (
-            <div className="space-y-2">
-              <Progress value={progress} className="h-2" />
-              <p className={cn(
-                "text-sm text-center",
-                isDark ? "text-gray-400" : "text-gray-500"
-              )}>
-                {progress < 100 ? `Import ${progress}%...` : "Traitement des données..."}
-              </p>
-            </div>
-          ) : (
-            <Button 
-              onClick={uploadFile} 
-              className={cn(
-                "w-full mt-2",
-                isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+          {expanded && (
+            <div className="p-4 pt-0 border-t border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm text-gray-400">
+                  Ce fichier sera importé dans la base de données tickets
+                </p>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={removeFile}
+                  disabled={uploading}
+                  className={cn(
+                    isDark ? "text-gray-400 hover:text-white" : "text-gray-500"
+                  )}
+                >
+                  <X size={18} />
+                </Button>
+              </div>
+              
+              {uploading ? (
+                <div className="py-6 flex flex-col items-center space-y-3">
+                  <div className="animate-spin text-blue-500">
+                    <Loader className="h-8 w-8" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium">Traitement en cours...</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Analyse et stockage des tickets dans la base de données
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <Button 
+                  onClick={uploadFile} 
+                  className={cn(
+                    "w-full mt-2",
+                    isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+                  )}
+                >
+                  <Upload size={18} className="mr-2" />
+                  Importer dans la base de données
+                </Button>
               )}
-            >
-              <Upload size={18} className="mr-2" />
-              Importer dans la base de données
-            </Button>
+            </div>
           )}
         </div>
       )}

@@ -3,25 +3,22 @@ import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { TicketUpload } from "@/components/TicketUpload";
 import { ChatInterface } from "@/components/ChatInterface";
-import { Upload, ArrowRight } from "lucide-react";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
 import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { SearchHistory } from "@/components/SearchHistory";
 
 const Dashboard = () => {
   const [initialMessage, setInitialMessage] = useState<string | undefined>();
+  const [ticketIds, setTicketIds] = useState<string[] | undefined>();
   const { theme } = useTheme();
-  const { isAdmin } = useAuth();
   const isDark = theme === "dark";
-  const navigate = useNavigate();
   
-  const handleFileUploaded = (message: string) => {
+  const handleFileUploaded = (message: string, ids?: string[]) => {
     setInitialMessage(message);
+    setTicketIds(ids);
   };
 
   const containerVariants = {
@@ -50,75 +47,71 @@ const Dashboard = () => {
       {isDark && <CosmicElements />}
       <Navbar />
       
-      <main className="container mx-auto pt-24 px-4 relative z-10">
+      <main className="container mx-auto pt-20 px-4 relative z-10 pb-10">
         <motion.div 
-          className="max-w-4xl mx-auto"
+          className="mx-auto"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants} className="text-center mb-8">
+          <motion.div variants={itemVariants} className="text-center mb-4">
             <h1 className={cn(
-              "text-4xl md:text-5xl font-bold text-gradient mb-4",
+              "text-3xl md:text-4xl font-bold text-gradient mb-1",
               isDark ? "text-white" : "text-gray-800"
             )}>
               Ticket AI Wizard
             </h1>
             
             <p className={cn(
-              "text-lg max-w-2xl mx-auto",
+              "text-sm max-w-2xl mx-auto",
               isDark ? "text-blue-200/90" : "text-blue-700/90"
             )}>
-              Explorez l'univers de vos tickets avec notre IA avancée. Importez votre fichier 
-              pour obtenir des réponses instantanées.
+              Importez votre fichier pour obtenir des réponses instantanées
             </p>
           </motion.div>
           
-          {isAdmin && (
-            <motion.div 
-              className="mb-6 flex justify-start"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Button 
-                onClick={() => navigate('/admin')} 
-                variant="ghost" 
-                className={cn(
-                  "flex items-center gap-2",
-                  isDark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900/30" : "text-blue-600 hover:text-blue-700 hover:bg-blue-100"
-                )}
-              >
-                Voir le dashboard administrateur
-                <ArrowRight size={16} />
-              </Button>
-            </motion.div>
-          )}
-          
-          <motion.div variants={itemVariants}>
-            <div className="cosmic-card mb-6">
-              <div className="p-6">
-                <h2 className={cn(
-                  "text-xl font-medium mb-4 flex items-center",
-                  isDark ? "text-white" : "text-gray-800"
-                )}>
-                  <Upload className={cn("mr-2", isDark ? "text-indigo-400" : "text-blue-600")} size={20} />
-                  Importez votre fichier de tickets
-                </h2>
-                <TicketUpload onFileUploaded={handleFileUploaded} />
-              </div>
-            </div>
-          </motion.div>
-          
-          {initialMessage && (
+          <div className="grid gap-6 md:grid-cols-7 lg:gap-8">
+            {/* Section historique */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              variants={itemVariants}
+              className="md:col-span-2"
             >
-              <ChatInterface initialMessage={initialMessage} />
+              <SearchHistory />
             </motion.div>
-          )}
+            
+            {/* Section principale */}
+            <motion.div
+              variants={itemVariants}
+              className="md:col-span-5"
+            >
+              <motion.div variants={itemVariants}>
+                <div className={cn(
+                  "mb-6 p-6 rounded-xl border",
+                  isDark 
+                    ? "bg-card/20 border-white/10" 
+                    : "bg-white border-gray-200"
+                )}>
+                  <h2 className={cn(
+                    "text-lg font-medium mb-4",
+                    isDark ? "text-white" : "text-gray-800"
+                  )}>
+                    Importer votre ticket
+                  </h2>
+                  <TicketUpload onFileUploaded={handleFileUploaded} />
+                </div>
+              </motion.div>
+              
+              {initialMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <ChatInterface initialMessage={initialMessage} ticketIds={ticketIds} />
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
         </motion.div>
       </main>
       

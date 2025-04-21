@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { ThemeProvider } from "./hooks/useTheme";
+import { SearchHistoryProvider } from "./hooks/useSearchHistory";
 
 // Pages
 import Index from "./pages/Index";
@@ -15,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import AdminUpload from "./pages/AdminUpload";
+import AdminUsers from "./pages/AdminUsers";
 
 // Create Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -40,7 +42,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     }
     
     if (!isAdmin) {
-      return <Navigate to="/dashboard" replace />;
+      return <Navigate to="/" replace />;
     }
     
     return <>{children}</>;
@@ -60,36 +62,57 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route 
-                  path="/dashboard" 
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin" 
-                  element={
-                    <AdminRoute>
-                      <AdminDashboard />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/upload" 
-                  element={
-                    <AdminRoute>
-                      <AdminUpload />
-                    </AdminRoute>
-                  } 
-                />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <SearchHistoryProvider>
+                <Routes>
+                  {/* Modification: La page / redirige vers /login si non authentifié, sinon vers dashboard */}
+                  <Route path="/" element={
+                    localStorage.getItem("user") ? (
+                      JSON.parse(localStorage.getItem("user") || "{}")?.isAdmin ? (
+                        <Navigate to="/admin" replace />
+                      ) : (
+                        <Navigate to="/dashboard" replace />
+                      )
+                    ) : (
+                      <Index />
+                    )
+                  } />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route 
+                    path="/dashboard" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/admin" 
+                    element={
+                      <AdminRoute>
+                        <AdminDashboard />
+                      </AdminRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/admin/upload" 
+                    element={
+                      <AdminRoute>
+                        <AdminUpload />
+                      </AdminRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/admin/users" 
+                    element={
+                      <AdminRoute>
+                        <AdminUsers />
+                      </AdminRoute>
+                    } 
+                  />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </SearchHistoryProvider>
             </AuthProvider>
           </BrowserRouter>
         </div>
