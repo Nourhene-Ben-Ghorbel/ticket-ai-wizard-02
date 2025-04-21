@@ -64,18 +64,8 @@ const App = () => (
             <AuthProvider>
               <SearchHistoryProvider>
                 <Routes>
-                  {/* Modification: La page / redirige vers /login si non authentifié, sinon vers dashboard */}
-                  <Route path="/" element={
-                    localStorage.getItem("user") ? (
-                      JSON.parse(localStorage.getItem("user") || "{}")?.isAdmin ? (
-                        <Navigate to="/admin" replace />
-                      ) : (
-                        <Navigate to="/dashboard" replace />
-                      )
-                    ) : (
-                      <Index />
-                    )
-                  } />
+                  {/* Modification: La page / pointe vers l'Index au lieu du redirect */}
+                  <Route path="/" element={<Index />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route 

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { recordMessage } from "../api/mongodb";
 import { useTheme } from "@/hooks/useTheme";
+import { Badge } from "@/components/ui/badge";
 
 interface Message {
   id: string;
@@ -90,6 +91,22 @@ export const ChatInterface = ({ initialMessage, ticketIds }: ChatInterfaceProps)
               isDark ? "text-blue-50" : "text-slate-900"
             )}>
               {message.content}
+              
+              {/* Afficher les IDs de tickets similaires en badges */}
+              {message.ticketIds && message.ticketIds.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="text-xs font-medium block w-full mb-1">Tickets similaires:</span>
+                  {message.ticketIds.map((id, index) => (
+                    <Badge 
+                      key={id} 
+                      variant="outline"
+                      className={isDark ? "bg-blue-900/30 text-blue-200" : "bg-blue-50 text-blue-700"}
+                    >
+                      {id}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -99,7 +116,7 @@ export const ChatInterface = ({ initialMessage, ticketIds }: ChatInterfaceProps)
 
   return (
     <div className={cn(
-      "flex flex-col h-[500px] rounded-xl overflow-hidden border",
+      "flex flex-col h-[450px] rounded-xl overflow-hidden border",
       isDark 
         ? "bg-slate-900/95 border-slate-800" 
         : "bg-gray-50 border-gray-200"

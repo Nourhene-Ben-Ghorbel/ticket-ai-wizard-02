@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { FileCode2, Upload, X, FileSpreadsheet, ChevronDown, ChevronUp, Loader } from "lucide-react";
@@ -41,17 +41,26 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
       }
       
       // Valider le format du contenu (en-tête + 1 ligne)
-      const validationResult = await validateExcelFormat(selectedFile);
-      if (!validationResult.isValid) {
+      try {
+        const validationResult = await validateExcelFormat(selectedFile);
+        if (!validationResult.isValid) {
+          toast({
+            title: "Format incorrect",
+            description: validationResult.message || "Le fichier doit contenir un en-tête et une seule ligne de données",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        setFile(selectedFile);
+        setExpanded(true);
+      } catch (error) {
         toast({
-          title: "Format incorrect",
-          description: validationResult.message,
+          title: "Erreur de validation",
+          description: "Impossible de valider le format du fichier",
           variant: "destructive",
         });
-        return;
       }
-      
-      setFile(selectedFile);
     }
   }, [toast]);
   
@@ -100,9 +109,6 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           **Problème identifié:** ${bestMatch.problem}
           
           **Solution:** ${bestMatch.solution}
-          
-          **Tickets similaires trouvés:**
-          ${ticketIdList}
           
           *Temps de recherche: ${searchResult.temps_recherche?.toFixed(2)}s*
         `;
@@ -180,17 +186,13 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     });
   };
   
-  const toggleExpand = () => {
-    setExpanded(!expanded);
-  };
-  
   return (
     <div className="w-full max-w-lg mx-auto">
       {!file ? (
         <div
           {...getRootProps()}
           className={cn(
-            "border-2 border-dashed rounded-xl p-6 sm:p-8 text-center transition-colors",
+            "border-2 border-dashed rounded-xl p-4 text-center transition-colors",
             isDragActive 
               ? isDark
                 ? "border-blue-500 bg-blue-900/20" 
@@ -201,9 +203,9 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           )}
         >
           <input {...getInputProps()} />
-          <div className="flex flex-col items-center justify-center space-y-3">
+          <div className="flex flex-col items-center justify-center space-y-2">
             <div className={cn(
-              "p-3 rounded-full",
+              "p-2 rounded-full",
               isDragActive 
                 ? isDark
                   ? "bg-blue-900/50"
@@ -213,32 +215,30 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
                   : "bg-gray-100"
             )}>
               <Upload 
-                size={30} 
+                size={24} 
                 className={isDragActive ? 'text-blue-600' : 'text-gray-400'} 
               />
             </div>
-            <div>
-              <h3 className="text-lg font-medium text-foreground">
-                {isDragActive ? "Déposez votre fichier ici" : "Importer un ticket"}
-              </h3>
-              <p className={cn(
-                "text-sm mt-1",
-                isDark ? "text-gray-400" : "text-gray-500"
-              )}>
-                Formats supportés: XLSX, XLS, CSV
-              </p>
-            </div>
+            <h3 className="text-base font-medium text-foreground">
+              {isDragActive ? "Déposez votre fichier ici" : "Importer un ticket"}
+            </h3>
+            <p className={cn(
+              "text-xs",
+              isDark ? "text-gray-400" : "text-gray-500"
+            )}>
+              Formats supportés: XLSX, XLS, CSV
+            </p>
             <Button 
               type="button" 
               variant="outline"
+              size="sm"
               className={cn(
-                "mt-1",
                 isDark 
                   ? "border-blue-700 text-blue-400 hover:bg-blue-900/30"
                   : "border-blue-200 text-blue-600"
               )}
             >
-              Parcourir les fichiers
+              Parcourir
             </Button>
           </div>
         </div>
@@ -249,17 +249,17 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         )}>
           <div 
             className={cn(
-              "p-4 flex items-center justify-between cursor-pointer",
+              "p-3 flex items-center justify-between cursor-pointer",
               isDark ? "hover:bg-gray-800/50" : "hover:bg-gray-50"
             )}
-            onClick={toggleExpand}
+            onClick={() => setExpanded(!expanded)}
           >
             <div className="flex items-center space-x-3">
               <div className={cn(
-                "p-2 rounded-lg",
+                "p-1.5 rounded-lg",
                 isDark ? "bg-blue-900/50" : "bg-blue-100"
               )}>
-                <FileSpreadsheet size={20} className={isDark ? "text-blue-400" : "text-blue-600"} />
+                <FileSpreadsheet size={18} className={isDark ? "text-blue-400" : "text-blue-600"} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate" title={file.name}>
@@ -269,14 +269,14 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
                   {(file.size / 1024).toFixed(2)} KB
                 </p>
               </div>
-              {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </div>
           </div>
           
           {expanded && (
-            <div className="p-4 pt-0 border-t border-gray-100 dark:border-gray-800">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-sm text-muted-foreground">
+            <div className="p-3 pt-0 border-t border-gray-100 dark:border-gray-800">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs text-muted-foreground">
                   Ce fichier sera analysé pour trouver des tickets similaires
                 </p>
                 <Button 
@@ -284,22 +284,19 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
                   size="sm" 
                   onClick={removeFile}
                   disabled={uploading}
-                  className="text-gray-500 h-8"
+                  className="text-gray-500 h-7"
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </Button>
               </div>
               
               {uploading ? (
-                <div className="py-6 flex flex-col items-center space-y-3">
+                <div className="py-4 flex flex-col items-center space-y-2">
                   <div className="animate-spin text-blue-500">
-                    <Loader className="h-8 w-8" />
+                    <Loader className="h-6 w-6" />
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-medium">Analyse en cours...</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Recherche de tickets similaires dans la base de données
-                    </p>
+                    <p className="text-xs font-medium">Analyse en cours...</p>
                   </div>
                 </div>
               ) : (
@@ -309,9 +306,10 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
                     "w-full",
                     isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-600 hover:bg-blue-700"
                   )}
+                  size="sm"
                 >
-                  <FileCode2 size={16} className="mr-2" />
-                  Analyser avec l'IA
+                  <FileCode2 size={14} className="mr-2" />
+                  Analyser
                 </Button>
               )}
             </div>

@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
-import { Upload, FileSpreadsheet, Check, X, Loader } from "lucide-react";
+import { Upload, FileSpreadsheet, X, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/useTheme";
@@ -90,17 +90,13 @@ export const AdminFileUpload = () => {
     }
   };
   
-  const toggleExpand = () => {
-    setExpanded(!expanded);
-  };
-  
   return (
     <div className="w-full max-w-2xl mx-auto">
       {!file ? (
         <div
           {...getRootProps()}
           className={cn(
-            "border-2 border-dashed rounded-xl p-12 text-center transition-colors",
+            "border-2 border-dashed rounded-xl p-8 text-center transition-colors",
             isDragActive 
               ? isDark
                 ? "border-blue-500 bg-blue-900/20"
@@ -111,9 +107,9 @@ export const AdminFileUpload = () => {
           )}
         >
           <input {...getInputProps()} />
-          <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="flex flex-col items-center justify-center space-y-3">
             <div className={cn(
-              "p-4 rounded-full",
+              "p-3 rounded-full",
               isDragActive 
                 ? isDark
                   ? "bg-blue-900/50"
@@ -123,7 +119,7 @@ export const AdminFileUpload = () => {
                   : "bg-gray-100"
             )}>
               <Upload 
-                size={36} 
+                size={32} 
                 className={cn(
                   isDragActive
                     ? "text-blue-400"
@@ -151,7 +147,7 @@ export const AdminFileUpload = () => {
               type="button" 
               variant="outline"
               className={cn(
-                "mt-4",
+                "mt-2",
                 isDark
                   ? "border-blue-700 text-blue-400 hover:bg-blue-900/30"
                   : "border-blue-200 text-blue-600"
@@ -171,14 +167,14 @@ export const AdminFileUpload = () => {
               "p-4 flex items-center justify-between cursor-pointer",
               isDark ? "hover:bg-gray-800/50" : "hover:bg-gray-50"
             )}
-            onClick={toggleExpand}
+            onClick={() => setExpanded(!expanded)}
           >
             <div className="flex items-center space-x-3">
               <div className={cn(
                 "p-2 rounded-lg",
                 isDark ? "bg-blue-900/50" : "bg-blue-100"
               )}>
-                <FileSpreadsheet size={24} className={isDark ? "text-blue-400" : "text-blue-600"} />
+                <FileSpreadsheet size={22} className={isDark ? "text-blue-400" : "text-blue-600"} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className={cn(

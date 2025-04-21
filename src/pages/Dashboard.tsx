@@ -47,31 +47,24 @@ const Dashboard = () => {
       {isDark && <CosmicElements />}
       <Navbar />
       
-      <main className="container mx-auto pt-20 px-4 relative z-10 pb-10">
+      <main className="container mx-auto pt-16 px-4 relative z-10 pb-10">
         <motion.div 
           className="mx-auto"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants} className="text-center mb-4">
+          <motion.div variants={itemVariants} className="text-center mb-2">
             <h1 className={cn(
-              "text-3xl md:text-4xl font-bold text-gradient mb-1",
+              "text-xl md:text-2xl font-bold text-gradient mb-0",
               isDark ? "text-white" : "text-gray-800"
             )}>
               Ticket AI Wizard
             </h1>
-            
-            <p className={cn(
-              "text-sm max-w-2xl mx-auto",
-              isDark ? "text-blue-200/90" : "text-blue-700/90"
-            )}>
-              Importez votre fichier pour obtenir des réponses instantanées
-            </p>
           </motion.div>
           
-          <div className="grid gap-6 md:grid-cols-7 lg:gap-8">
-            {/* Section historique */}
+          <div className="grid gap-4 md:grid-cols-7 lg:gap-6">
+            {/* Section historique à gauche */}
             <motion.div
               variants={itemVariants}
               className="md:col-span-2"
@@ -86,13 +79,13 @@ const Dashboard = () => {
             >
               <motion.div variants={itemVariants}>
                 <div className={cn(
-                  "mb-6 p-6 rounded-xl border",
+                  "mb-4 p-4 rounded-xl border",
                   isDark 
                     ? "bg-card/20 border-white/10" 
                     : "bg-white border-gray-200"
                 )}>
                   <h2 className={cn(
-                    "text-lg font-medium mb-4",
+                    "text-lg font-medium mb-3",
                     isDark ? "text-white" : "text-gray-800"
                   )}>
                     Importer votre ticket
