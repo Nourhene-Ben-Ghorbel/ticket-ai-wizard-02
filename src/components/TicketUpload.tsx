@@ -88,8 +88,10 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     setUploading(true);
     setProgress(0);
     
+    let progressInterval: NodeJS.Timeout;
+
     try {
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setProgress(prev => {
           if (prev >= 90) {
             clearInterval(progressInterval);
