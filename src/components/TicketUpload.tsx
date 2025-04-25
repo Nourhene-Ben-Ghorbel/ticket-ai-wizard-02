@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
@@ -8,11 +7,16 @@ import { searchSimilarTickets, validateExcelFormat } from "../api/fastApiService
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
+import { Progress } from "@/components/ui/progress";
+import { motion } from "framer-motion";
+import { TicketInstructions } from "./TicketInstructions";
 
 export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string, ticketIds?: string[]) => void }) => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [isMinimized, setIsMinimized] = useState(false);
   const { toast } = useToast();
   const { theme } = useTheme();
   const { addToHistory } = useSearchHistory();
@@ -22,7 +26,6 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     const selectedFile = acceptedFiles[0];
     
     if (selectedFile) {
-      // Vérifier le format du fichier
       const fileType = selectedFile.type;
       if (
         fileType !== "application/vnd.ms-excel" &&
@@ -40,7 +43,6 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         return;
       }
       
-      // Valider le format du contenu (en-tête + 1 ligne)
       try {
         const validationResult = await validateExcelFormat(selectedFile);
         if (!validationResult.isValid) {
@@ -84,21 +86,27 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     if (!file) return;
     
     setUploading(true);
+    setProgress(0);
     
     try {
-      // Simulation file reading for content extraction
+      const progressInterval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 500);
+
       const fileContent = await readFileAsText(file);
       
-      // Search for similar tickets using the file content
       const searchResult = await searchSimilarTickets(fileContent);
       
-      // Process the search result
       if (searchResult.status === 'success' && searchResult.tickets && searchResult.tickets.length > 0) {
-        // Found similar tickets - display the best solution
         const bestMatch = searchResult.tickets[0];
         const ticketIds = searchResult.tickets.map(t => t.ticket_id);
         
-        // Construire un message avec tous les IDs de tickets similaires
         const ticketIdList = searchResult.tickets
           .map(t => `- ID: ${t.ticket_id} (score: ${(t.similarity_score * 100).toFixed(1)}%)`)
           .join('\n');
@@ -118,7 +126,6 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           description: `Une solution a été trouvée avec un score de similarité de ${(bestMatch.similarity_score * 100).toFixed(1)}%`,
         });
         
-        // Ajouter à l'historique de recherche
         addToHistory({
           queryText: file.name,
           result: responseMessage,
@@ -127,7 +134,6 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         
         onFileUploaded(responseMessage, ticketIds);
       } else if (searchResult.status === 'not_found') {
-        // No similar tickets found
         const noMatchMessage = `
           Je n'ai pas trouvé de ticket similaire dans notre base de données.
           
@@ -139,7 +145,6 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           description: "Aucun ticket similaire n'a été trouvé dans notre base de données.",
         });
         
-        // Ajouter à l'historique de recherche
         addToHistory({
           queryText: file.name,
           result: noMatchMessage
@@ -147,7 +152,6 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         
         onFileUploaded(noMatchMessage);
       } else {
-        // Error in search
         toast({
           title: "Erreur de recherche",
           description: searchResult.message || "Une erreur est survenue lors de la recherche.",
@@ -166,11 +170,14 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
       
       onFileUploaded("Une erreur est survenue lors de l'analyse de votre ticket. Veuillez réessayer.");
     } finally {
+      clearInterval(progressInterval);
+      setProgress(100);
+      setIsMinimized(true);
       setUploading(false);
+      setTimeout(() => setProgress(0), 1000);
     }
   };
   
-  // Helper function to read file content as text
   const readFileAsText = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -187,135 +194,144 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
   };
   
   return (
-    <div className="w-full max-w-lg mx-auto">
-      {!file ? (
-        <div
-          {...getRootProps()}
-          className={cn(
-            "border-2 border-dashed rounded-xl p-4 text-center transition-colors",
-            isDragActive 
-              ? isDark
-                ? "border-blue-500 bg-blue-900/20" 
-                : "border-blue-500 bg-blue-50" 
-              : isDark
-                ? "border-gray-700 hover:border-blue-500 hover:bg-blue-900/10"
-                : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/30"
-          )}
-        >
-          <input {...getInputProps()} />
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <div className={cn(
-              "p-2 rounded-full",
+    <div className="flex flex-col md:flex-row gap-6">
+      <div className={cn(
+        "transition-all duration-300",
+        isMinimized ? "w-full md:w-1/3" : "w-full md:w-2/3"
+      )}>
+        {!file ? (
+          <div
+            {...getRootProps()}
+            className={cn(
+              "border-2 border-dashed rounded-xl p-8 text-center transition-colors",
               isDragActive 
                 ? isDark
-                  ? "bg-blue-900/50"
-                  : "bg-blue-100" 
+                  ? "border-blue-500 bg-blue-900/20" 
+                  : "border-blue-500 bg-blue-50"
                 : isDark
-                  ? "bg-gray-800"
-                  : "bg-gray-100"
-            )}>
-              <Upload 
-                size={24} 
-                className={isDragActive ? 'text-blue-600' : 'text-gray-400'} 
-              />
-            </div>
-            <h3 className="text-base font-medium text-foreground">
-              {isDragActive ? "Déposez votre fichier ici" : "Importer un ticket"}
-            </h3>
-            <p className={cn(
-              "text-xs",
-              isDark ? "text-gray-400" : "text-gray-500"
-            )}>
-              Formats supportés: XLSX, XLS, CSV
-            </p>
-            <Button 
-              type="button" 
-              variant="outline"
-              size="sm"
-              className={cn(
-                isDark 
-                  ? "border-blue-700 text-blue-400 hover:bg-blue-900/30"
-                  : "border-blue-200 text-blue-600"
-              )}
-            >
-              Parcourir
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className={cn(
-          "border rounded-xl",
-          isDark ? "bg-card/30 border-gray-800" : "bg-white border-gray-200"
-        )}>
-          <div 
-            className={cn(
-              "p-3 flex items-center justify-between cursor-pointer",
-              isDark ? "hover:bg-gray-800/50" : "hover:bg-gray-50"
+                  ? "border-gray-700 hover:border-blue-500 hover:bg-blue-900/10"
+                  : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/30"
             )}
-            onClick={() => setExpanded(!expanded)}
           >
-            <div className="flex items-center space-x-3">
+            <input {...getInputProps()} />
+            <div className="flex flex-col items-center justify-center space-y-2">
               <div className={cn(
-                "p-1.5 rounded-lg",
-                isDark ? "bg-blue-900/50" : "bg-blue-100"
+                "p-2 rounded-full",
+                isDragActive 
+                  ? isDark
+                    ? "bg-blue-900/50"
+                    : "bg-blue-100" 
+                  : isDark
+                    ? "bg-gray-800"
+                    : "bg-gray-100"
               )}>
-                <FileSpreadsheet size={18} className={isDark ? "text-blue-400" : "text-blue-600"} />
+                <Upload 
+                  size={24} 
+                  className={isDragActive ? 'text-blue-600' : 'text-gray-400'} 
+                />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate" title={file.name}>
-                  {file.name}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {(file.size / 1024).toFixed(2)} KB
-                </p>
-              </div>
-              {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              <h3 className="text-base font-medium text-foreground">
+                {isDragActive ? "Déposez votre fichier ici" : "Importer un ticket"}
+              </h3>
+              <p className={cn(
+                "text-xs",
+                isDark ? "text-gray-400" : "text-gray-500"
+              )}>
+                Formats supportés: XLSX, XLS, CSV
+              </p>
+              <Button 
+                type="button" 
+                variant="outline"
+                size="sm"
+                className={cn(
+                  isDark 
+                    ? "border-blue-700 text-blue-400 hover:bg-blue-900/30"
+                    : "border-blue-200 text-blue-600"
+                )}
+              >
+                Parcourir
+              </Button>
             </div>
           </div>
-          
-          {expanded && (
-            <div className="p-3 pt-0 border-t border-gray-100 dark:border-gray-800">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-xs text-muted-foreground">
-                  Ce fichier sera analysé pour trouver des tickets similaires
-                </p>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={removeFile}
-                  disabled={uploading}
-                  className="text-gray-500 h-7"
-                >
-                  <X size={14} />
-                </Button>
-              </div>
-              
-              {uploading ? (
-                <div className="py-4 flex flex-col items-center space-y-2">
-                  <div className="animate-spin text-blue-500">
-                    <Loader className="h-6 w-6" />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs font-medium">Analyse en cours...</p>
-                  </div>
-                </div>
-              ) : (
-                <Button 
-                  onClick={uploadFile} 
-                  className={cn(
-                    "w-full",
-                    isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-600 hover:bg-blue-700"
-                  )}
-                  size="sm"
-                >
-                  <FileCode2 size={14} className="mr-2" />
-                  Analyser
-                </Button>
+        ) : (
+          <motion.div 
+            className={cn(
+              "border rounded-xl",
+              isDark ? "bg-card/30 border-gray-800" : "bg-white border-gray-200"
+            )}
+            layout
+          >
+            <div 
+              className={cn(
+                "p-3 flex items-center justify-between cursor-pointer",
+                isDark ? "hover:bg-gray-800/50" : "hover:bg-gray-50"
               )}
+              onClick={() => setExpanded(!expanded)}
+            >
+              <div className="flex items-center space-x-3">
+                <div className={cn(
+                  "p-1.5 rounded-lg",
+                  isDark ? "bg-blue-900/50" : "bg-blue-100"
+                )}>
+                  <FileSpreadsheet size={18} className={isDark ? "text-blue-400" : "text-blue-600"} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate" title={file.name}>
+                    {file.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {(file.size / 1024).toFixed(2)} KB
+                  </p>
+                </div>
+                {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
             </div>
-          )}
-        </div>
-      )}
+            
+            {expanded && (
+              <div className="p-4 pt-0 border-t border-gray-700">
+                {uploading ? (
+                  <motion.div 
+                    className="py-6 flex flex-col items-center space-y-4"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <div className="w-full space-y-2">
+                      <Progress value={progress} className="h-2" />
+                      <p className="text-sm text-center text-muted-foreground">
+                        Analyse du ticket en cours...
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium">Veuillez patienter</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Notre système recherche la meilleure solution
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <Button 
+                    onClick={uploadFile} 
+                    className={cn(
+                      "w-full mt-2",
+                      isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+                    )}
+                  >
+                    <Upload size={18} className="mr-2" />
+                    Analyser le ticket
+                  </Button>
+                )}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
+
+      <div className={cn(
+        "transition-all duration-300",
+        isMinimized ? "hidden" : "w-full md:w-1/3"
+      )}>
+        <TicketInstructions />
+      </div>
     </div>
   );
 };
