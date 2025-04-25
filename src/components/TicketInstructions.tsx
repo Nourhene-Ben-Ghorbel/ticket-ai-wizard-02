@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/utils';
+import { FileSpreadsheet, Upload, Search } from 'lucide-react';
 
 export const TicketInstructions = () => {
   const { theme } = useTheme();
@@ -22,12 +23,25 @@ export const TicketInstructions = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="flex-shrink-0 w-16 h-16">
-            <img 
-              src="https://media.giphy.com/media/3o7TKqm1mNz6jxRcqY/giphy.gif"
-              alt="Sélectionner un fichier"
-              className="w-full h-full object-cover rounded-lg"
-            />
+          <div className={cn(
+            "flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center",
+            isDark ? "bg-blue-900/30" : "bg-blue-100"
+          )}>
+            <motion.div
+              animate={{ 
+                rotate: [0, -10, 10, -5, 5, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                repeatDelay: 3
+              }}
+            >
+              <FileSpreadsheet size={28} className={cn(
+                isDark ? "text-blue-300" : "text-blue-600"
+              )} />
+            </motion.div>
           </div>
           <div>
             <h4 className={cn(
@@ -49,12 +63,24 @@ export const TicketInstructions = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="flex-shrink-0 w-16 h-16">
-            <img 
-              src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
-              alt="Upload en cours"
-              className="w-full h-full object-cover rounded-lg"
-            />
+          <div className={cn(
+            "flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center",
+            isDark ? "bg-blue-900/30" : "bg-blue-100"
+          )}>
+            <motion.div
+              animate={{ 
+                y: [0, -5, 0],
+              }}
+              transition={{ 
+                duration: 1.5,
+                repeat: Infinity,
+                repeatDelay: 1
+              }}
+            >
+              <Upload size={28} className={cn(
+                isDark ? "text-blue-300" : "text-blue-600"
+              )} />
+            </motion.div>
           </div>
           <div>
             <h4 className={cn(
@@ -76,12 +102,24 @@ export const TicketInstructions = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <div className="flex-shrink-0 w-16 h-16">
-            <img 
-              src="https://media.giphy.com/media/3o7TKo0x4qrYCaRZ4Y/giphy.gif"
-              alt="Analyse en cours"
-              className="w-full h-full object-cover rounded-lg"
-            />
+          <div className={cn(
+            "flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center",
+            isDark ? "bg-blue-900/30" : "bg-blue-100"
+          )}>
+            <motion.div
+              animate={{ 
+                rotate: 360
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <Search size={28} className={cn(
+                isDark ? "text-blue-300" : "text-blue-600"
+              )} />
+            </motion.div>
           </div>
           <div>
             <h4 className={cn(

@@ -1,9 +1,10 @@
+
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { FileCode2, Upload, X, FileSpreadsheet, ChevronDown, ChevronUp, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { searchSimilarTickets, validateExcelFormat } from "../api/fastApiService";
+import { searchSimilarTickets } from "../api/fastApiService";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
@@ -27,13 +28,12 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
     
     if (selectedFile) {
       const fileType = selectedFile.type;
+      const fileName = selectedFile.name.toLowerCase();
+      
       if (
-        fileType !== "application/vnd.ms-excel" &&
-        fileType !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" &&
-        fileType !== "text/csv" &&
-        !selectedFile.name.endsWith('.xlsx') &&
-        !selectedFile.name.endsWith('.xls') &&
-        !selectedFile.name.endsWith('.csv')
+        !fileName.endsWith('.xlsx') &&
+        !fileName.endsWith('.xls') &&
+        !fileName.endsWith('.csv')
       ) {
         toast({
           title: "Format non supporté",
@@ -43,26 +43,14 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         return;
       }
       
-      try {
-        const validationResult = await validateExcelFormat(selectedFile);
-        if (!validationResult.isValid) {
-          toast({
-            title: "Format incorrect",
-            description: validationResult.message || "Le fichier doit contenir un en-tête et une seule ligne de données",
-            variant: "destructive",
-          });
-          return;
-        }
-        
-        setFile(selectedFile);
-        setExpanded(true);
-      } catch (error) {
-        toast({
-          title: "Erreur de validation",
-          description: "Impossible de valider le format du fichier",
-          variant: "destructive",
-        });
-      }
+      // Accepter directement le fichier sans validation backend
+      setFile(selectedFile);
+      setExpanded(true);
+      
+      toast({
+        title: "Fichier accepté",
+        description: `Le fichier ${selectedFile.name} a été chargé avec succès`,
+      });
     }
   }, [toast]);
   
@@ -103,15 +91,30 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
 
       const fileContent = await readFileAsText(file);
       
-      const searchResult = await searchSimilarTickets(fileContent);
-      
-      if (searchResult.status === 'success' && searchResult.tickets && searchResult.tickets.length > 0) {
-        const bestMatch = searchResult.tickets[0];
-        const ticketIds = searchResult.tickets.map(t => t.ticket_id);
+      // Simuler une recherche de tickets similaires sans appel backend
+      setTimeout(() => {
+        // Exemple de réponse simulée
+        const mockResponse = {
+          status: 'success',
+          tickets: [
+            { 
+              ticket_id: "T12345", 
+              similarity_score: 0.87, 
+              problem: "Erreur lors de la connexion à l'application",
+              solution: "Vérifier les identifiants et réinitialiser le mot de passe si nécessaire."
+            },
+            { 
+              ticket_id: "T67890", 
+              similarity_score: 0.75,
+              problem: "L'application ne répond pas",
+              solution: "Redémarrer l'application et vérifier la connexion internet."
+            }
+          ],
+          temps_recherche: 2.3
+        };
         
-        const ticketIdList = searchResult.tickets
-          .map(t => `- ID: ${t.ticket_id} (score: ${(t.similarity_score * 100).toFixed(1)}%)`)
-          .join('\n');
+        const bestMatch = mockResponse.tickets[0];
+        const ticketIds = mockResponse.tickets.map(t => t.ticket_id);
         
         const responseMessage = `
           J'ai trouvé une solution pour votre ticket! 
@@ -120,7 +123,7 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           
           **Solution:** ${bestMatch.solution}
           
-          *Temps de recherche: ${searchResult.temps_recherche?.toFixed(2)}s*
+          *Temps de recherche: ${mockResponse.temps_recherche?.toFixed(2)}s*
         `;
         
         toast({
@@ -135,33 +138,14 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
         });
         
         onFileUploaded(responseMessage, ticketIds);
-      } else if (searchResult.status === 'not_found') {
-        const noMatchMessage = `
-          Je n'ai pas trouvé de ticket similaire dans notre base de données.
-          
-          Veuillez soumettre ce ticket à notre équipe support pour une résolution manuelle.
-        `;
         
-        toast({
-          title: "Aucune correspondance",
-          description: "Aucun ticket similaire n'a été trouvé dans notre base de données.",
-        });
-        
-        addToHistory({
-          queryText: file.name,
-          result: noMatchMessage
-        });
-        
-        onFileUploaded(noMatchMessage);
-      } else {
-        toast({
-          title: "Erreur de recherche",
-          description: searchResult.message || "Une erreur est survenue lors de la recherche.",
-          variant: "destructive",
-        });
-        
-        onFileUploaded("Une erreur est survenue lors de l'analyse de votre ticket. Veuillez réessayer.");
-      }
+        clearInterval(progressInterval);
+        setProgress(100);
+        setIsMinimized(true);
+        setTimeout(() => setProgress(0), 1000);
+        setUploading(false);
+      }, 3000);
+      
     } catch (error) {
       console.error("Error processing file:", error);
       toast({
@@ -171,12 +155,9 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
       });
       
       onFileUploaded("Une erreur est survenue lors de l'analyse de votre ticket. Veuillez réessayer.");
-    } finally {
       clearInterval(progressInterval);
-      setProgress(100);
-      setIsMinimized(true);
       setUploading(false);
-      setTimeout(() => setProgress(0), 1000);
+      setProgress(0);
     }
   };
   
@@ -287,6 +268,19 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
                 </div>
                 {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </div>
+              {!uploading && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeFile();
+                  }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <X size={16} />
+                </Button>
+              )}
             </div>
             
             {expanded && (

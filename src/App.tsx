@@ -17,6 +17,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import AdminUpload from "./pages/AdminUpload";
 import AdminUsers from "./pages/AdminUsers";
+import AdminManageUsers from "./pages/AdminManageUsers";
 
 // Create Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -97,6 +98,14 @@ const App = () => (
                     element={
                       <AdminRoute>
                         <AdminUsers />
+                      </AdminRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/admin/manage-users" 
+                    element={
+                      <AdminRoute>
+                        <AdminManageUsers />
                       </AdminRoute>
                     } 
                   />
