@@ -26,19 +26,21 @@ const Progress = React.forwardRef<
         animation: value && value > 0 ? "gradient-shift 2s ease infinite" : "none"
       }}
     />
-    <style jsx global>{`
-      @keyframes gradient-shift {
-        0% {
-          background-position: 0% 50%;
+    <style>
+      {`
+        @keyframes gradient-shift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-    `}</style>
+      `}
+    </style>
   </ProgressPrimitive.Root>
 ))
 Progress.displayName = ProgressPrimitive.Root.displayName
