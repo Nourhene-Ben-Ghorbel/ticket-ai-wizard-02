@@ -28,19 +28,19 @@ const AdminDashboard = () => {
       {isDark && <CosmicElements />}
       <Navbar />
       
-      <main className="container mx-auto pt-24 pb-16 px-4 relative z-10">
+      <main className="container mx-auto pt-12 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col gap-4 mb-8">
+          <div className="flex flex-col gap-4 mb-6">
             <div>
               <h1 className={cn(
-                "text-4xl md:text-5xl font-bold text-gradient mb-2",
+                "text-2xl md:text-3xl font-bold text-gradient mb-2",
                 isDark ? "text-white" : "text-gray-800"
               )}>
                 Dashboard administrateur
               </h1>
               
               <p className={cn(
-                "text-lg",
+                "text-sm",
                 isDark ? "text-blue-200/90" : "text-blue-700/90"
               )}>
                 Consultez les statistiques et analyses de performances sur les tickets traités.

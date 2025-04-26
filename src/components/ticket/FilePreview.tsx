@@ -1,5 +1,5 @@
 
-import { FileSpreadsheet, X, Upload } from "lucide-react";
+import { FileSpreadsheet, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
@@ -56,14 +56,14 @@ export const FilePreview = ({ file, onRemove, onUpload, uploading }: FilePreview
       {!uploading && (
         <div className="p-4 pt-0 border-t border-gray-700">
           <Button 
-            onClick={onUpload} 
+            onClick={onRemove}
             className={cn(
               "w-full mt-2",
-              isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+              isDark ? "bg-red-600 hover:bg-red-700" : "bg-red-500 hover:bg-red-600"
             )}
           >
-            <Upload size={18} className="mr-2" />
-            Analyser le ticket
+            <X size={18} className="mr-2" />
+            Annuler
           </Button>
         </div>
       )}
