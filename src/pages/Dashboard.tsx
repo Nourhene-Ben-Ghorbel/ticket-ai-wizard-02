@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { TicketUpload } from "@/components/TicketUpload";
@@ -9,6 +8,7 @@ import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { SearchHistory } from "@/components/SearchHistory";
+import { TicketInstructions } from "@/components/TicketInstructions";
 
 const Dashboard = () => {
   const [initialMessage, setInitialMessage] = useState<string | undefined>();
