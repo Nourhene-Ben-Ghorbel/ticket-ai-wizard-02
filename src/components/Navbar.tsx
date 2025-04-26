@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -40,7 +39,6 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
@@ -128,6 +126,9 @@ export const Navbar = () => {
                     </NavLink>
                     <NavLink href="/admin/upload" icon={<Upload size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
                       Import des données
+                    </NavLink>
+                    <NavLink href="/admin/users" icon={<UserCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                      Gestion Utilisateurs
                     </NavLink>
                   </>
                 )}
@@ -237,6 +238,9 @@ export const Navbar = () => {
                     </NavLink>
                     <NavLink href="/admin/upload" icon={<Upload size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
                       Import des données
+                    </NavLink>
+                    <NavLink href="/admin/users" icon={<UserCircle size={18} className={isDark ? "text-indigo-300" : "text-blue-600"} />}>
+                      Gestion Utilisateurs
                     </NavLink>
                   </>
                 )}

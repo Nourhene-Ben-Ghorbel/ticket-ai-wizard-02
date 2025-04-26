@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
@@ -30,15 +29,17 @@ const AdminDashboard = () => {
       
       <main className="container mx-auto pt-12 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
+          <div className="flex justify-end items-center mb-6">
+            <h1 className={cn(
+              "text-xl md:text-2xl font-bold text-gradient",
+              isDark ? "text-white" : "text-gray-800"
+            )}>
+              Dashboard administrateur
+            </h1>
+          </div>
+          
           <div className="flex flex-col gap-4 mb-6">
             <div>
-              <h1 className={cn(
-                "text-2xl md:text-3xl font-bold text-gradient mb-2",
-                isDark ? "text-white" : "text-gray-800"
-              )}>
-                Dashboard administrateur
-              </h1>
-              
               <p className={cn(
                 "text-sm",
                 isDark ? "text-blue-200/90" : "text-blue-700/90"

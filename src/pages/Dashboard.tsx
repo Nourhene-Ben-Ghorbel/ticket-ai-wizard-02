@@ -54,7 +54,7 @@ const Dashboard = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants} className="text-center mb-2">
+          <motion.div variants={itemVariants} className="text-center mb-6">
             <h1 className={cn(
               "text-xl md:text-2xl font-bold text-gradient mb-0",
               isDark ? "text-white" : "text-gray-800"
@@ -63,11 +63,11 @@ const Dashboard = () => {
             </h1>
           </motion.div>
           
-          <div className="grid gap-4 md:grid-cols-7 lg:gap-6">
+          <div className="grid gap-4 md:grid-cols-12 lg:gap-6">
             {/* Section historique à gauche */}
             <motion.div
               variants={itemVariants}
-              className="md:col-span-2"
+              className="md:col-span-3 h-[calc(100vh-200px)] overflow-y-auto"
             >
               <SearchHistory />
             </motion.div>
@@ -75,11 +75,11 @@ const Dashboard = () => {
             {/* Section principale */}
             <motion.div
               variants={itemVariants}
-              className="md:col-span-5"
+              className="md:col-span-6"
             >
               <motion.div variants={itemVariants}>
                 <div className={cn(
-                  "mb-4 p-4 rounded-xl border",
+                  "h-[calc(100vh-200px)] overflow-y-auto p-4 rounded-xl border",
                   isDark 
                     ? "bg-card/20 border-white/10" 
                     : "bg-white border-gray-200"
@@ -91,18 +91,27 @@ const Dashboard = () => {
                     Importer votre ticket
                   </h2>
                   <TicketUpload onFileUploaded={handleFileUploaded} />
+
+                  {initialMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="mt-4"
+                    >
+                      <ChatInterface initialMessage={initialMessage} ticketIds={ticketIds} />
+                    </motion.div>
+                  )}
                 </div>
               </motion.div>
-              
-              {initialMessage && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <ChatInterface initialMessage={initialMessage} ticketIds={ticketIds} />
-                </motion.div>
-              )}
+            </motion.div>
+
+            {/* Section instructions à droite */}
+            <motion.div
+              variants={itemVariants}
+              className="md:col-span-3 h-[calc(100vh-200px)] overflow-y-auto"
+            >
+              <TicketInstructions />
             </motion.div>
           </div>
         </motion.div>
