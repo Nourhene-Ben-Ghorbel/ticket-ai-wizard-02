@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { TicketUpload } from "@/components/TicketUpload";
@@ -64,7 +65,6 @@ const Dashboard = () => {
           </motion.div>
           
           <div className="grid gap-4 md:grid-cols-12 lg:gap-6">
-            {/* Section historique à gauche */}
             <motion.div
               variants={itemVariants}
               className="md:col-span-3 h-[calc(100vh-200px)] overflow-y-auto"
@@ -72,41 +72,37 @@ const Dashboard = () => {
               <SearchHistory />
             </motion.div>
             
-            {/* Section principale */}
             <motion.div
               variants={itemVariants}
               className="md:col-span-6"
             >
-              <motion.div variants={itemVariants}>
-                <div className={cn(
-                  "h-[calc(100vh-200px)] overflow-y-auto p-4 rounded-xl border",
-                  isDark 
-                    ? "bg-card/20 border-white/10" 
-                    : "bg-white border-gray-200"
+              <div className={cn(
+                "h-[calc(100vh-200px)] overflow-y-auto p-4 rounded-xl border",
+                isDark 
+                  ? "bg-card/20 border-white/10" 
+                  : "bg-white border-gray-200"
+              )}>
+                <h2 className={cn(
+                  "text-lg font-medium mb-3",
+                  isDark ? "text-white" : "text-gray-800"
                 )}>
-                  <h2 className={cn(
-                    "text-lg font-medium mb-3",
-                    isDark ? "text-white" : "text-gray-800"
-                  )}>
-                    Importer votre ticket
-                  </h2>
-                  <TicketUpload onFileUploaded={handleFileUploaded} />
+                  Importer votre ticket
+                </h2>
+                <TicketUpload onFileUploaded={handleFileUploaded} />
 
-                  {initialMessage && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="mt-4"
-                    >
-                      <ChatInterface initialMessage={initialMessage} ticketIds={ticketIds} />
-                    </motion.div>
-                  )}
-                </div>
-              </motion.div>
+                {initialMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mt-4"
+                  >
+                    <ChatInterface initialMessage={initialMessage} ticketIds={ticketIds} />
+                  </motion.div>
+                )}
+              </div>
             </motion.div>
 
-            {/* Section instructions à droite */}
             <motion.div
               variants={itemVariants}
               className="md:col-span-3 h-[calc(100vh-200px)] overflow-y-auto"

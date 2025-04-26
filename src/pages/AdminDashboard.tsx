@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
@@ -6,7 +7,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import { CosmicElements, GlowingOrb } from "@/components/CosmicElements";
-import { Button } from "@/components/ui/button";
 
 const AdminDashboard = () => {
   const { theme } = useTheme();
@@ -14,8 +14,6 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [iframeLoaded, setIframeLoaded] = useState(false);
 
-  // PowerBI configuration
-  // Utilisation de l'embed public gratuit à la place d'un dashboard payant
   const powerBIEmbedUrl = "https://app.powerbi.com/view?r=eyJrIjoiZGZkYmM4MzUtZmM0YS00MzcwLTliOWMtMzAxYzY3Yzk5ZmZiIiwidCI6IjBmOGQxYjllLTUwMDMtNDBiNS05MmEyLWUzYTIxOWM5MzYxMCIsImMiOjF9";
 
   return (
@@ -29,9 +27,9 @@ const AdminDashboard = () => {
       
       <main className="container mx-auto pt-12 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-end items-center mb-6">
+          <div className="flex items-center mb-6">
             <h1 className={cn(
-              "text-xl md:text-2xl font-bold text-gradient",
+              "text-xl md:text-2xl font-bold text-gradient flex-grow",
               isDark ? "text-white" : "text-gray-800"
             )}>
               Dashboard administrateur
