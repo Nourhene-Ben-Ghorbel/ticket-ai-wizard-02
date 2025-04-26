@@ -1,5 +1,5 @@
 
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient, ObjectId, Document } from 'mongodb';
 
 export interface Ticket {
   _id?: ObjectId;
@@ -36,7 +36,7 @@ export class MongoService {
       const collection = db.collection<Ticket>('tickets');
       
       // Utiliser l'index de recherche en texte pour trouver les tickets similaires
-      const tickets = await collection
+      const documents = await collection
         .find({
           $text: {
             $search: preprocessedQuery,
@@ -48,6 +48,17 @@ export class MongoService {
         .sort({ score: { $meta: "textScore" } })
         .limit(5)
         .toArray();
+      
+      // Ensure the documents are properly typed as Tickets
+      const tickets: Ticket[] = documents.map(doc => ({
+        _id: doc._id,
+        title: doc.title as string,
+        description: doc.description as string,
+        solution: doc.solution as string,
+        keywords: doc.keywords as string[],
+        preprocessedContent: doc.preprocessedContent as string | undefined,
+        createdAt: doc.createdAt as Date
+      }));
 
       return tickets;
     } catch (error) {
