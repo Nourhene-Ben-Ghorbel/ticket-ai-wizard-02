@@ -12,8 +12,8 @@ export const AdminUsersInfo = () => {
       "p-8 relative",
       isDark ? "bg-card/70 border-white/10" : "bg-white border-gray-200"
     )}>
-      <div className="flex items-center mb-6">
-        <h2 className="text-xl font-medium">Informations</h2>
+      <div className="flex items-center mb-5">
+        <h2 className="text-lg font-medium">Informations</h2>
       </div>
       
       <div className="space-y-4">

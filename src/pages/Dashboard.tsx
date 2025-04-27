@@ -55,9 +55,9 @@ const Dashboard = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants} className="text-center mb-6">
+          <motion.div variants={itemVariants} className="text-center mb-4">
             <h1 className={cn(
-              "text-xl md:text-2xl font-bold text-gradient mb-0",
+              "text-lg md:text-xl font-bold text-gradient mb-0",
               isDark ? "text-white" : "text-gray-800"
             )}>
               Ticket AI Wizard
@@ -69,7 +69,7 @@ const Dashboard = () => {
               variants={itemVariants}
               className="md:col-span-3"
             >
-              <div className="h-[600px] overflow-y-auto">
+              <div className="h-[550px] overflow-y-auto">
                 <SearchHistory />
               </div>
             </motion.div>
@@ -79,13 +79,13 @@ const Dashboard = () => {
               className="md:col-span-6"
             >
               <div className={cn(
-                "h-[600px] overflow-y-auto p-4 rounded-xl border",
+                "h-[550px] overflow-y-auto p-4 rounded-xl border",
                 isDark 
                   ? "bg-card/20 border-white/10" 
                   : "bg-white border-gray-200"
               )}>
                 <h2 className={cn(
-                  "text-lg font-medium mb-3",
+                  "text-base font-medium mb-3",
                   isDark ? "text-white" : "text-gray-800"
                 )}>
                   Importer votre ticket
@@ -109,7 +109,7 @@ const Dashboard = () => {
               variants={itemVariants}
               className="md:col-span-3"
             >
-              <div className="h-[600px] overflow-y-auto">
+              <div className="h-[550px] overflow-y-auto">
                 <TicketInstructions />
               </div>
             </motion.div>

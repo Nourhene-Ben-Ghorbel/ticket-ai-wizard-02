@@ -8,11 +8,11 @@ import { UserPlus, Loader, CheckCircle } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 
-interface CreateUserFormProps {
-  onUserCreated: (newUser: any) => void;
+export interface CreateUserFormProps {
+  onUserCreated?: (newUser: any) => void;
 }
 
-export const CreateUserForm = ({ onUserCreated }: CreateUserFormProps) => {
+export const CreateUserForm = ({ onUserCreated }: CreateUserFormProps = {}) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const { toast } = useToast();
@@ -38,7 +38,9 @@ export const CreateUserForm = ({ onUserCreated }: CreateUserFormProps) => {
         createdAt: new Date()
       };
       
-      onUserCreated(newUser);
+      if (onUserCreated) {
+        onUserCreated(newUser);
+      }
       
       toast({
         title: "Utilisateur créé",

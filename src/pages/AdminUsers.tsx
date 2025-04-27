@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
@@ -23,7 +24,7 @@ const AdminUsers = () => {
       {isDark && <CosmicElements />}
       <Navbar />
       
-      <main className="container mx-auto pt-24 pb-16 px-4 relative z-10">
+      <main className="container mx-auto pt-16 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <AdminUsersHeader />
           

@@ -10,17 +10,17 @@ export const AdminUsersHeader = () => {
   const isDark = theme === "dark";
 
   return (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
       <div>
         <h1 className={cn(
-          "text-4xl md:text-5xl font-bold text-gradient mb-2",
+          "text-2xl md:text-3xl font-bold text-gradient mb-2",
           isDark ? "text-white" : "text-gray-800"
         )}>
           Gestion des utilisateurs
         </h1>
         
         <p className={cn(
-          "text-lg",
+          "text-sm md:text-base",
           isDark ? "text-blue-200/90" : "text-blue-700/90"
         )}>
           Créez de nouveaux comptes utilisateurs pour accéder à l'application
