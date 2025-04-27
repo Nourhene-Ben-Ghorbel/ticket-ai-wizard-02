@@ -4,7 +4,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { FileDropzone } from "./ticket/FileDropzone";
 import { FilePreview } from "./ticket/FilePreview";
-import { UploadProgress } from "./ticket/UploadProgress";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 import { useToast } from "@/hooks/use-toast";
 
@@ -108,20 +107,12 @@ export const TicketUpload = ({ onFileUploaded }: { onFileUploaded: (text: string
           <FileDropzone onFileAccepted={setFile} />
         ) : (
           <div>
-            <FilePreview file={file} onRemove={() => setFile(null)} />
-            <div className="mt-4 flex justify-center">
-              <button 
-                onClick={handleUpload} 
-                className={cn(
-                  "px-6 py-2 rounded-lg font-medium transition-all",
-                  isDark 
-                    ? "bg-blue-600 text-white hover:bg-blue-700" 
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                )}
-              >
-                Analyser le ticket
-              </button>
-            </div>
+            <FilePreview
+              file={file}
+              onRemove={() => setFile(null)}
+              onUpload={handleUpload}
+              uploading={uploading}
+            />
           </div>
         )}
         
