@@ -67,9 +67,11 @@ const Dashboard = () => {
           <div className="grid gap-4 md:grid-cols-12 lg:gap-6">
             <motion.div
               variants={itemVariants}
-              className="md:col-span-3 h-[calc(100vh-200px)] overflow-y-auto"
+              className="md:col-span-3"
             >
-              <SearchHistory />
+              <div className="h-[600px] overflow-y-auto">
+                <SearchHistory />
+              </div>
             </motion.div>
             
             <motion.div
@@ -77,7 +79,7 @@ const Dashboard = () => {
               className="md:col-span-6"
             >
               <div className={cn(
-                "h-[calc(100vh-200px)] overflow-y-auto p-4 rounded-xl border",
+                "h-[600px] overflow-y-auto p-4 rounded-xl border",
                 isDark 
                   ? "bg-card/20 border-white/10" 
                   : "bg-white border-gray-200"
@@ -105,9 +107,11 @@ const Dashboard = () => {
 
             <motion.div
               variants={itemVariants}
-              className="md:col-span-3 h-[calc(100vh-200px)] overflow-y-auto"
+              className="md:col-span-3"
             >
-              <TicketInstructions />
+              <div className="h-[600px] overflow-y-auto">
+                <TicketInstructions />
+              </div>
             </motion.div>
           </div>
         </motion.div>

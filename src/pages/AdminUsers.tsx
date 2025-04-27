@@ -73,7 +73,7 @@ const AdminUsers = () => {
       
       <main className="container mx-auto pt-24 pb-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center mb-8">
+          <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className={cn(
                 "text-4xl md:text-5xl font-bold text-gradient mb-2",
@@ -89,6 +89,16 @@ const AdminUsers = () => {
                 Créez de nouveaux comptes utilisateurs pour accéder à l'application
               </p>
             </div>
+            
+            <Button
+              onClick={() => navigate('/admin/manage-users')}
+              className={cn(
+                "cosmic-button",
+                isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+              )}
+            >
+              Voir les utilisateurs existants
+            </Button>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
